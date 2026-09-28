@@ -9,6 +9,7 @@ import { createEngine } from './core/engine.js';
 import { buildSections } from './core/sections.js';
 import { createQueue } from './core/queue.js';
 import { createTurnEngine } from './core/turn-engine.js';
+import { createPixelEngine } from './core/pixel-engine.js';
 import { premiumPaint, premiumDefs } from './core/fills.js';
 import { commandFromPayload } from './core/commands.js';
 import { createBoard } from './ui/board.js';
@@ -67,6 +68,8 @@ async function boot() {
   setText('tAutoSim', 'autoSim');
   setText('tMode', 'mode');
   setText('tGameMode', 'gameMode');
+  setText('tCanvas', 'canvas');
+  setText('tIconStyle', 'iconStyle');
   setText('tSignupMode', 'signupMode');
   setText('tSkipSeconds', 'skipSeconds');
   setText('tPerTurn', 'regionsPerTurn');
@@ -96,6 +99,11 @@ async function boot() {
   const gmSel = document.getElementById('ctlGameMode');
   gmSel.options[0].textContent = i18n.t('modeFree');
   gmSel.options[1].textContent = i18n.t('modeTurns');
+  gmSel.options[2].textContent = i18n.t('modePixel');
+  const iconSel = document.getElementById('ctlIconStyle');
+  iconSel.options[0].textContent = i18n.t('iconBw');
+  iconSel.options[1].textContent = i18n.t('iconGlitch');
+  iconSel.options[2].textContent = i18n.t('iconFade');
   const suSel = document.getElementById('ctlSignupMode');
   suSel.options[0].textContent = i18n.t('signupFree');
   suSel.options[1].textContent = i18n.t('signupGift');
@@ -117,6 +125,17 @@ async function boot() {
     return;
   }
 
+  // Canvas index (Canvas picker + mode/canvas pairing).
+  try {
+    const idxRes = await fetch('/js/data/canvases/index.json');
+    if (idxRes.ok) {
+      const idx = await idxRes.json();
+      canvasIndex = Array.isArray(idx.canvases) ? idx.canvases : [];
+    }
+  } catch {
+    /* ignore */
+  }
+
   const palette = buildPalette(meta.palette);
   const colorIndex = i18n.colorIndex(palette);
   const engine = createEngine({
@@ -126,12 +145,16 @@ async function boot() {
   });
   const limiter = createRateLimiter({ cooldownMs: 4000, shareCap: 0 });
 
+  // Pixel (paid) canvases get a fill engine instead of the region-colour engine.
+  let iconStyle = 'bw';
+  let canvasIndex = [];
+
   // --- state ---
   let selectedColor = 1;
   let lastEventAt = 0;
   let live = false;
   let sourceManager = null;
-  let gameMode = config.gameMode === 'turns' ? 'turns' : 'free'; // 'free' | 'turns'
+  let gameMode = ['free', 'turns', 'pixel'].includes(config.gameMode) ? config.gameMode : 'free'; // 'free' | 'turns' | 'pixel'
   let signupMode = 'free'; // 'free' | 'gift'
   let perTurn = 1;
   let skipSeconds = 20;
@@ -141,6 +164,17 @@ async function boot() {
   let artworkTitle = '';
   const signatures = [];
   let lastTurnUserId = '';
+
+  const pixelEngine = meta.type === 'pixel' ? createPixelEngine({ regions: meta.regions }) : null;
+  if (pixelEngine) document.body.classList.add('pixel');
+  const gifters = new Map();
+  try {
+    const savedIcon = localStorage.getItem('cc.iconStyle');
+    if (['bw', 'glitch', 'fade'].includes(savedIcon)) iconStyle = savedIcon;
+  } catch {
+    /* ignore */
+  }
+  buildLegend();
 
   const queue = createQueue();
   let sections = buildSections(meta.regions, perTurn);
@@ -184,6 +218,12 @@ async function boot() {
 
   // ---------- shared helpers ----------
   function updateProgress() {
+    if (pixelEngine) {
+      const p = pixelEngine.progress();
+      document.getElementById('progressText').textContent = `${p.filled} / ${p.total}`;
+      document.getElementById('progressBar').style.width = `${p.total ? p.percent * 100 : 0}%`;
+      return;
+    }
     const p = engine.progress();
     document.getElementById('progressText').textContent = `${p.colored} / ${p.total}`;
     document.getElementById('progressBar').style.width = `${p.total ? (p.colored / p.total) * 100 : 0}%`;
@@ -283,6 +323,7 @@ async function boot() {
   }
   // The always-on hint telling viewers exactly what to type right now.
   function refreshInstruction() {
+    if (gameMode === 'pixel') return setInstruction(i18n.t('instrPixel'));
     if (gameMode === 'free') return setInstruction(i18n.t('instrFree'));
     if (turnEngine.state === 'signup') return setInstruction(i18n.t('instrSignup', { word: i18n.t('joinWord') }));
     if (turnEngine.state === 'waiting') return setInstruction(i18n.t('instrWaiting', { word: i18n.t('joinWord') }));
@@ -292,6 +333,96 @@ async function boot() {
     }
     if (turnEngine.state === 'complete') return setInstruction(i18n.t('instrComplete'));
     setInstruction('');
+  }
+
+  // ---- pixel mode helpers ----
+  function bumpGifter(name) {
+    if (!name) return;
+    gifters.set(name, (gifters.get(name) || 0) + 1);
+  }
+  function topGifters(n = 3) {
+    return [...gifters.entries()].sort((a, b) => b[1] - a[1]).slice(0, n).map((e) => e[0]);
+  }
+  function renderCell(number, color) {
+    board.setColor(number, color);
+    board.flash(number);
+  }
+  function renderCells(cells) {
+    for (const c of cells) renderCell(c.number, c.color);
+  }
+  function checkMilestonesAndCelebrate() {
+    if (!pixelEngine) return;
+    for (const t of pixelEngine.checkMilestones()) {
+      if (t >= 1) {
+        toast(i18n.t('toastComplete', { names: topGifters().join(', ') }), { ms: 9000, tone: 'good' });
+      } else {
+        toast(i18n.t('toastMilestone', { pct: Math.round(t * 100) }), { ms: 5000, tone: 'good' });
+      }
+    }
+  }
+  // One gift fills one random unfilled cell of its colour.
+  function doPixelFill(color, count, user) {
+    if (!pixelEngine) return 0;
+    const cells = pixelEngine.fillRandom(color, count);
+    if (!cells.length) return 0;
+    renderCells(cells);
+    ticker.add({
+      user: user || 'gift',
+      region: cells.map((c) => c.number).join(','),
+      hex: palette[color - 1] ? palette[color - 1].hex : '#2dd4bf',
+      verb: i18n.t('verbColored'),
+    });
+    updateProgress();
+    checkMilestonesAndCelebrate();
+    reportState();
+    return cells.length;
+  }
+  function doPixelPowerup(cells, user) {
+    if (!pixelEngine || !cells.length) return 0;
+    renderCells(cells);
+    ticker.add({ user: user || 'gift', region: `${cells.length}×`, hex: '#2dd4bf', verb: i18n.t('verbColored') });
+    updateProgress();
+    checkMilestonesAndCelebrate();
+    reportState();
+    return cells.length;
+  }
+
+  // ---- pixel legend (colours -> gift triggers) ----
+  function buildLegend() {
+    const el = document.getElementById('legend');
+    if (!el) return;
+    if (!pixelEngine) {
+      el.innerHTML = '';
+      return;
+    }
+    const rows = [`<div class="cc-leg-title">${i18n.t('legendTitle')}</div>`];
+    for (const c of palette) {
+      rows.push(
+        `<div class="cc-leg-row"><span class="cc-leg-num">${c.index}</span>` +
+          `<span class="cc-leg-sw" style="background:${c.hex}"></span>` +
+          `<span class="cc-icon" title="gift">🎁</span></div>`
+      );
+    }
+    el.innerHTML = rows.join('');
+    el.className = 'cc-legend ico-' + iconStyle;
+  }
+  function applyLegend() {
+    const el = document.getElementById('legend');
+    if (el) el.className = 'cc-legend ico-' + iconStyle;
+  }
+
+  // ---- mode / canvas switching (reload only when the canvas TYPE must change) ----
+  function reloadParams(obj) {
+    const u = new URL(window.location.href);
+    for (const [k, v] of Object.entries(obj)) {
+      if (v == null) u.searchParams.delete(k);
+      else u.searchParams.set(k, v);
+    }
+    window.location.href = u.toString();
+  }
+  function firstCanvasOfType(type) {
+    const c = canvasIndex.find((x) => x.type === type);
+    return c ? c.dir : null;
   }
 
   // ---------- turn-relay rendering ----------
@@ -473,6 +604,8 @@ async function boot() {
     lastEventAt = Date.now();
     const text = textOf(ev);
 
+    if (gameMode === 'pixel') return; // paid mode: gifts only
+
     if (gameMode === 'turns') {
       const user = userOf(ev);
       if (isJoin(text)) {
@@ -538,7 +671,21 @@ async function boot() {
     const rnd = (n) => Math.floor(Math.random() * n);
     const gifter = ef.event ? userOf(ef.event) : null;
 
-    if (key === 'command') {
+    if (/^fill_\d+$/.test(key)) {
+      const color = Number(key.slice(5));
+      const who = gifter ? gifter.name : 'gift';
+      bumpGifter(who);
+      doPixelFill(color, 1, who);
+    } else if (key === 'reveal_color') {
+      if (pixelEngine) doPixelPowerup(pixelEngine.fillNearestColor(), gifter ? gifter.name : 'gift');
+    } else if (key === 'fill_brush') {
+      const n = Math.max(1, Number(payload.count) || Number(ef.event && ef.event.coins) || 5);
+      if (pixelEngine) doPixelPowerup(pixelEngine.fillAny(n), gifter ? gifter.name : 'gift');
+    } else if (key === 'reveal_all') {
+      if (pixelEngine) doPixelPowerup(pixelEngine.fillAny(pixelEngine.total()), gifter ? gifter.name : 'gift');
+    } else if (key === 'golden_pixel') {
+      if (pixelEngine) doPixelPowerup(pixelEngine.fillAny(1), gifter ? gifter.name : 'gift');
+    } else if (key === 'command') {
       const cmd = commandFromPayload(payload);
       if (cmd) runCommand(cmd.name, cmd.args, ef.event);
     } else     if (key === 'priority_join') {
@@ -594,8 +741,9 @@ async function boot() {
 
   // ---------- control panel ----------
   function setGameMode(m) {
-    gameMode = m === 'turns' ? 'turns' : 'free';
+    gameMode = ['free', 'turns', 'pixel'].includes(m) ? m : 'free';
     controlPanel.setGameMode(gameMode);
+    document.body.classList.toggle('pixel', gameMode === 'pixel');
     if (gameMode === 'turns') {
       turnEngine.openSignup();
       renderSignup();
@@ -615,7 +763,27 @@ async function boot() {
       document.getElementById('modeBadge').textContent = i18n.t(m);
       reportState();
     },
-    onGameMode: setGameMode,
+    onGameMode: (m) => {
+      // Pixel needs a pixel canvas; standard modes need a standard one.
+      const needPixel = m === 'pixel';
+      const isPixel = meta.type === 'pixel';
+      if (needPixel !== isPixel) {
+        const target = firstCanvasOfType(needPixel ? 'pixel' : 'standard');
+        reloadParams({ mode: m, canvas: target || config.canvas });
+        return;
+      }
+      setGameMode(m);
+    },
+    onCanvas: (dir) => reloadParams({ canvas: dir }),
+    onIconStyle: (s) => {
+      iconStyle = ['bw', 'glitch', 'fade'].includes(s) ? s : 'bw';
+      try {
+        localStorage.setItem('cc.iconStyle', iconStyle);
+      } catch {
+        /* ignore */
+      }
+      applyLegend();
+    },
     onSignupMode: (m) => {
       signupMode = m === 'gift' ? 'gift' : 'free';
     },
@@ -787,6 +955,14 @@ async function boot() {
     }
   }, 1300);
 
+  // ---------- demo driver (pixel mode, offline) ----------
+  setInterval(() => {
+    if (gameMode !== 'pixel' || !sourceManager || sourceManager.active !== 'demo' || !autoSimOn || !pixelEngine) return;
+    const who = 'demo' + (100 + Math.floor(Math.random() * 900));
+    bumpGifter(who);
+    doPixelFill(1 + Math.floor(Math.random() * palette.length), 1, who);
+  }, 450);
+
   // ---------- start source ----------
   sourceManager = createSourceManager({
     config,
@@ -814,6 +990,9 @@ async function boot() {
   controlPanel.setSource(sourceManager.active);
   controlPanel.setGameMode(gameMode);
   controlPanel.setSignupMode(signupMode);
+  controlPanel.setCanvas(config.canvas);
+  controlPanel.setCanvasOptions(canvasIndex.length ? canvasIndex : [{ dir: config.canvas, title: config.canvas }], config.canvas);
+  controlPanel.setIconStyle(iconStyle);
   if (gameMode === 'turns') {
     turnEngine.openSignup();
     renderSignup();

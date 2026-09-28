@@ -347,6 +347,43 @@ body.live .cc-toasts { top: 62px; }
   to { opacity: 1; transform: none; }
 }
 
+/* ---------- pixel legend (colors -> gift triggers) ---------- */
+.cc-legend {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 34;
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(15, 16, 21, 0.9);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 14px;
+  max-height: 74vh;
+}
+body.pixel .cc-legend { display: flex; }
+body.pixel .cc-panel { display: none; }
+.cc-legend .cc-leg-title { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 2px; }
+.cc-legend .cc-leg-row { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.cc-legend .cc-leg-num { width: 18px; text-align: center; font-weight: 800; color: var(--accent); }
+.cc-legend .cc-leg-sw { width: 18px; height: 18px; border-radius: 5px; border: 1px solid rgba(0, 0, 0, 0.3); }
+.cc-legend .cc-leg-name { color: var(--muted); min-width: 52px; }
+.cc-icon { font-size: 20px; line-height: 1; display: inline-block; filter: grayscale(1) contrast(1.2); }
+.cc-legend.ico-bw .cc-icon { filter: grayscale(1) contrast(1.5); }
+.cc-legend.ico-glitch .cc-icon { animation: cc-glitch 1.4s steps(2, end) infinite; }
+.cc-legend.ico-fade .cc-icon { animation: cc-fade 1.6s ease-in-out infinite; }
+@keyframes cc-glitch {
+  0%, 100% { transform: translate(0, 0); text-shadow: 2px 0 #f0f, -2px 0 #0ff; }
+  25% { transform: translate(-1px, 1px); text-shadow: -2px 0 #f0f, 2px 0 #0ff; }
+  50% { transform: translate(1px, -1px); }
+  75% { transform: translate(-1px, 0); }
+}
+@keyframes cc-fade {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; filter: grayscale(1) contrast(1.5); }
+}
+
 /* ---------- live mode: hide all chrome ---------- */
 body.live .cc-header,
 body.live .cc-panel,

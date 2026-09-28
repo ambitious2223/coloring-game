@@ -37,6 +37,7 @@
           <div id="ticker" class="cc-feed"></div>
         </div>
         <div id="stageOverlay" class="cc-stageoverlay"></div>
+        <div id="legend" class="cc-legend"></div>
       </section>
 
       <aside class="cc-panel">
@@ -69,7 +70,19 @@
       </label>
 
       <label class="cc-field"><span id="tGameMode">Game mode</span>
-        <select id="ctlGameMode"><option value="free">Free</option><option value="turns">Turns</option></select>
+        <select id="ctlGameMode"><option value="free">Free</option><option value="turns">Turns</option><option value="pixel">Pixel</option></select>
+      </label>
+
+      <label class="cc-field"><span id="tCanvas">Canvas</span>
+        <select id="ctlCanvas"></select>
+      </label>
+
+      <label class="cc-field"><span id="tIconStyle">Trigger icons</span>
+        <select id="ctlIconStyle">
+          <option value="bw">Black &amp; white</option>
+          <option value="glitch">Glitch</option>
+          <option value="fade">Fade</option>
+        </select>
       </label>
 
       <label class="cc-field"><span id="tSignupMode">Sign-up</span>

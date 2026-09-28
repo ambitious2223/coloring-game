@@ -11,6 +11,8 @@ export function wireControlPanel({
   onToggleLive,
   onGameMode,
   onSignupMode,
+  onCanvas,
+  onIconStyle,
   onOpenSignup,
   onStart,
   onSkip,
@@ -25,6 +27,8 @@ export function wireControlPanel({
   const modeSel = document.getElementById('ctlMode');
   const gameModeSel = document.getElementById('ctlGameMode');
   const signupModeSel = document.getElementById('ctlSignupMode');
+  const canvasSel = document.getElementById('ctlCanvas');
+  const iconStyleSel = document.getElementById('ctlIconStyle');
   const autoSimEl = document.getElementById('ctlAutoSim');
   const regionEl = document.getElementById('ctlRegion');
   const colorEl = document.getElementById('ctlColor');
@@ -49,6 +53,8 @@ export function wireControlPanel({
   modeSel.addEventListener('change', () => onMode(modeSel.value));
   gameModeSel.addEventListener('change', () => onGameMode(gameModeSel.value));
   signupModeSel.addEventListener('change', () => onSignupMode(signupModeSel.value));
+  canvasSel.addEventListener('change', () => onCanvas(canvasSel.value));
+  iconStyleSel.addEventListener('change', () => onIconStyle(iconStyleSel.value));
   autoSimEl.addEventListener('change', () => onAutoSim(autoSimEl.checked));
   perTurnEl.addEventListener('change', () => onPerTurn(Number(perTurnEl.value)));
   skipSecondsEl.addEventListener('change', () => onSkipSeconds(Number(skipSecondsEl.value)));
@@ -76,6 +82,16 @@ export function wireControlPanel({
     },
     setSignupMode: (m) => {
       signupModeSel.value = m;
+    },
+    setCanvas: (id) => {
+      canvasSel.value = id;
+    },
+    setCanvasOptions: (list, selected) => {
+      canvasSel.innerHTML = list.map((c) => `<option value="${c.dir || c.id}">${c.title || c.id}</option>`).join('');
+      if (selected) canvasSel.value = selected;
+    },
+    setIconStyle: (s) => {
+      iconStyleSel.value = s;
     },
     setAutoSim: (v) => {
       autoSimEl.checked = !!v;
