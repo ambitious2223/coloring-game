@@ -85,18 +85,22 @@ Therefore:
 - **Done (this scaffold):**
   - Repo at `C:\dev\color-chaos`, git init, remote `origin` → GitHub `coloring-game`.
   - `scripts/serve.mjs` static server on **:45125** (verified: /, css, js, canvas all 200).
-  - `scripts/gen-demo-canvas.mjs` placeholder generator (jittered lattice) → **80-region
-    demo canvas**.
-  - `scripts/validate-canvas.mjs` — the canvas contract validator (demo canvas **PASS**).
+  - `scripts/gen-demo-canvas.mjs` placeholder generator (jittered lattice).
+  - `scripts/generate-svg.mjs` — the real procedural generator (Voronoi + mosaic/blobs/
+    mandala, deterministic from `--seed`, polylabel labels). Canvases: `canvas-voronoi-42`,
+    `canvas-mosaic-7`, `canvas-blobs-3`, `canvas-mandala-9`, `canvas-demo` — all **PASS**.
+  - `scripts/validate-canvas.mjs` — the canvas contract validator.
   - Canvas format, hub manifests (`game.manifest.json`, `tikora.manifest.json`).
   - Game: SVG board + number labels, palette, live feed, host dock (backtick), lock mode
     (default) + chaos mode, rate-limiting, EN/TR/AR i18n, hub connector with offline mock.
-  - Tests: 13 passing (`npm test`). Syntax check: 15 files clean.
-- **Not yet verified:** the **browser click-test** (no headless browser available here):
-  loading the page, clicking a region, seeing the mock feed color regions, and the
-  backtick host dock. **Do this first next session and fix anything that surfaces.**
-- **Not built yet:** real `generate-svg.mjs` (Gemini), hub registration entry in Tikora,
-  chaos-mode-specific gift tools, snapshot/timelapse, sounds.
+  - Tests: 13 passing (`npm test`). Syntax check: all files clean.
+  - Committed and pushed to GitHub. Registered in Tikora's Game Store (`BUILTIN_GAMES`,
+    port 45125) on branch `feat/clash-royale-integration`.
+- **Verified by headless screenshot:** the page renders (canvas + labels + palette + i18n),
+  and the mock feed colors regions end-to-end (parser → engine → board → feed → progress),
+  on both the demo canvas and a generated Voronoi canvas.
+- **Not built yet:** chaos-mode-specific gift tools beyond the current set, snapshot/
+  timelapse, sounds, the `target`-color reveal mode.
 - **Hub integration:** contract ready (`docs/HUB_INTEGRATION.md`), **no gift→effect
   mappings are seeded** — the streamer creates them in the hub UI.
 
@@ -104,6 +108,7 @@ Therefore:
 
 ```
 npm run serve        # http://localhost:45125
+npm run gen -- --style voronoi --seed 42 --regions 90 --out src/js/data/canvases/my-canvas
 npm test             # core logic tests (node --test)
 npm run validate     # validate the demo canvas
 npm run validate:all # validate every canvas

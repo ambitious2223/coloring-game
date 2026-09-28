@@ -78,7 +78,9 @@ Output is `PASS`/`FAIL` per canvas with reasons; exit code 0 only when all pass.
 
 ## The procedural generator (`scripts/generate-svg.mjs`)
 
-Built in parallel. CLI:
+Implemented (Voronoi + mosaic/blobs/mandala, deterministic from `--seed`, polylabel
+labels). Run it with `npm run gen -- --style voronoi --seed 42 --regions 90 --out <dir>`.
+CLI:
 
 ```
 node scripts/generate-svg.mjs --style voronoi --seed 42 --regions 90 \

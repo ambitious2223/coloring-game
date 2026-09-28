@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "serve": "node scripts/serve.mjs",
+    "gen": "node scripts/generate-svg.mjs",
     "gen:demo": "node scripts/gen-demo-canvas.mjs",
     "validate": "node scripts/validate-canvas.mjs src/js/data/canvases/canvas-demo",
     "validate:all": "node scripts/validate-canvas.mjs --all",

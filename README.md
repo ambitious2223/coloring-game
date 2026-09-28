@@ -69,8 +69,18 @@ falls back to an offline mock so it is always demoable. Full contract:
 
 ## Canvas format & the generator
 
-Canvases are `canvas.svg` + `canvas.json`. The exact rules — and the prompt for building
-the procedural generator (built in parallel) — are in `docs/CANVAS_FORMAT.md`.
+Canvases are `canvas.svg` + `canvas.json`. The exact rules are in
+`docs/CANVAS_FORMAT.md`.
+
+Generate new canvases procedurally (deterministic from `--seed`):
+
+```bash
+npm run gen -- --style voronoi --seed 42 --regions 90 --out src/js/data/canvases/my-canvas
+npm run validate -- src/js/data/canvases/my-canvas   # or: npm run validate:all
+```
+
+Styles: `voronoi`, `mosaic`, `blobs`, `mandala`. Add `--targets` for a per-region target
+color. `scripts/gen-demo-canvas.mjs` is a simpler placeholder generator.
 
 ## License
 
