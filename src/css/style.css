@@ -106,7 +106,7 @@ body.test .cc-testbanner { display: block; }
   min-width: 0;
 }
 .cc-board {
-  width: min(70vh, 100%);
+  width: min(78vh, 100%);
   aspect-ratio: 1 / 1;
   background: #ffffff;
   border-radius: 14px;
@@ -133,7 +133,7 @@ body.test .cc-testbanner { display: block; }
 }
 
 /* ---------- overlay strip (progress + ticker) ---------- */
-.cc-overlay { width: min(70vh, 100%); display: flex; flex-direction: column; gap: 8px; }
+.cc-overlay { width: min(78vh, 100%); display: flex; flex-direction: column; gap: 8px; }
 .cc-progress { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--muted); }
 .cc-progress-count { color: var(--text); white-space: nowrap; }
 .cc-bar { flex: 1; height: 8px; border-radius: 999px; background: var(--panel); overflow: hidden; }
@@ -416,14 +416,49 @@ body.live .cc-testbanner { display: none !important; }
 body.live .cc-livehint { display: inline-flex; }
 body.live .cc-livehint.show { opacity: 1; }
 
-body.live .cc-board { width: min(82vh, 94vw); }
-body.live .cc-overlay { width: min(82vh, 94vw); }
+body.live .cc-board { width: min(92vh, 96vw); }
+body.live .cc-overlay { width: min(92vh, 96vw); }
 body.live { background: transparent; }
 body.live .cc-main { background: transparent; }
+
+/* ---------- pixel mode: trigger rail on the side, bigger board, no who-colored feed ---------- */
+body.pixel .cc-feed { display: none; }
+body.pixel .cc-stage { padding-left: 216px; }
+body.pixel .cc-board { width: min(90vh, 94vw); }
+body.pixel .cc-overlay { width: min(90vh, 94vw); }
+body.pixel .cc-legend {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: auto;
+  width: 200px;
+  border-radius: 0;
+  border-top: none;
+  border-right: 1px solid var(--line);
+  border-bottom: none;
+  border-left: none;
+  justify-content: center;
+  gap: 10px;
+  max-height: none;
+  transform: none;
+}
 
 @media (max-width: 820px) {
   .cc-main { flex-direction: column; }
   .cc-panel { width: 100%; border-inline-start: none; border-top: 1px solid var(--line); }
   .cc-board { width: min(90vw, 62vh); }
   .cc-overlay { width: min(90vw, 62vh); }
+  body.pixel .cc-stage { padding-left: 0; padding-bottom: 150px; }
+  body.pixel .cc-legend {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    border-right: none;
+    border-top: 1px solid var(--line);
+  }
 }

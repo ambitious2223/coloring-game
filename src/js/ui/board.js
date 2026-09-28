@@ -94,6 +94,13 @@ export function createBoard({ mount, svgText, meta, palette, onRegionClick, minL
   }
   function zoomAt(px, py, factor) {
     const ns = clampScale(vscale * factor);
+    if (ns <= 1) {
+      vscale = 1;
+      vtx = 0;
+      vty = 0;
+      applyTransform();
+      return;
+    }
     const k = ns / vscale;
     vtx = px - k * (px - vtx);
     vty = py - k * (py - vty);

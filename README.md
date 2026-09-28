@@ -72,8 +72,9 @@ The monetization mode. A pixel picture where every cell already knows its colour
 3. **Power-ups** (big gifts): `reveal_color` (finish a colour), `fill_brush` (fill several
    cells), `reveal_all` (complete the mural), `golden_pixel`.
 4. **Milestones** fire at 25/50/75/100% — toasts + celebration.
-5. A **legend overlay** shows the 9 colours with their **trigger icons** (3 animated styles:
-   B&W / glitch / fade — Controls → *Trigger icons*).
+5. A **trigger rail** on the side shows the 9 colors → their **gift triggers** (replaces the
+   "who colored" feed in Pixel mode), with 3 animated icon styles (B&W / glitch / fade —
+   Controls → *Trigger icons*).
 6. **Zoom:** wheel to zoom, drag to pan, auto-zoom to the last filled cell, double-click to
    reset.
 

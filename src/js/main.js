@@ -379,7 +379,7 @@ async function boot() {
     const cells = pixelEngine.fillRandom(color, count);
     if (!cells.length) return 0;
     renderCells(cells);
-    board.focusCell(cells[0].number, 2.4); // auto-zoom to the action
+    board.focusCell(cells[0].number, 2.0); // auto-zoom to the action
     ticker.add({
       user: user || 'gift',
       region: cells.map((c) => c.number).join(','),
