@@ -470,8 +470,8 @@ async function boot() {
     for (const c of palette) {
       const name = giftNameFor(c.index);
       rows.push(
-        `<div class="cc-leg-row" data-color="${c.index}"><span class="cc-leg-num">${c.index}</span>` +
-          `<span class="cc-leg-sw" style="background:${c.hex}"></span>` +
+        `<div class="cc-leg-row" data-color="${c.index}">` +
+          `<span class="cc-leg-crayon" style="--c:${c.hex}"><span class="cc-leg-badge">${c.index}</span></span>` +
           `<span class="cc-icon" title="${name || 'gift'}">${giftIconHtml(c.index)}</span>` +
           `<span class="cc-leg-info"><span class="cc-leg-name">${name}</span>` +
           `<span class="cc-leg-left" data-color="${c.index}">–</span></span></div>`
@@ -489,7 +489,7 @@ async function boot() {
     const board = document.querySelector('.cc-board');
     if (!board) return;
     const r = board.getBoundingClientRect();
-    const railW = 244;
+    const railW = 286;
     let left = r.right + 14;
     if (left + railW > window.innerWidth - 8) left = Math.max(8, r.left - railW - 14);
     el.style.position = 'fixed';
