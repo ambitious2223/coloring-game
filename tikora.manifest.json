@@ -59,5 +59,18 @@
   "events": [
     { "key": "gift", "label": "Gift received" },
     { "key": "comment", "label": "Comment" }
+  ],
+  "commands": [
+    { "key": "join", "label": "Join sign-up" },
+    { "key": "gold", "label": "Gold a region" },
+    { "key": "wipe", "label": "Wipe the canvas" },
+    {
+      "key": "color",
+      "label": "Color a region",
+      "args": [
+        { "key": "region", "type": "number" },
+        { "key": "color", "type": "string" }
+      ]
+    }
   ]
 }

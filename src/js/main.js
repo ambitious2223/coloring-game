@@ -10,6 +10,7 @@ import { buildSections } from './core/sections.js';
 import { createQueue } from './core/queue.js';
 import { createTurnEngine } from './core/turn-engine.js';
 import { premiumPaint, premiumDefs } from './core/fills.js';
+import { commandFromPayload } from './core/commands.js';
 import { createBoard } from './ui/board.js';
 import { createPaletteBar } from './ui/palette-bar.js';
 import { createTicker } from './ui/ticker.js';
@@ -447,6 +448,35 @@ async function boot() {
     doColor(parsed.region, parsed.color, user);
   }
 
+  // Run a hub-routed chat command (see docs/COMMANDS.md). The hub parses the
+  // chat and sends effect 'command' carrying { name, args } plus the event.
+  function runCommand(name, args, event) {
+    const cmd = String(name || '').toLowerCase();
+    const user = event ? userOf(event) : { userId: 'command', name: 'command', avatar: '' };
+    if (cmd === 'join') {
+      if (turnEngine.addPlayer(user)) {
+        if (turnEngine.state === 'signup') renderSignup();
+      }
+    } else if (cmd === 'gold') {
+      const r = engine.randomUncolored();
+      if (r) {
+        engine.apply({ regionNumber: r.number, color: 1, user: user.name });
+        board.applyPaint(r.number, premiumPaint('gold'));
+        board.flash(r.number);
+      }
+    } else if (cmd === 'wipe') {
+      engine.clearAll();
+      board.reset();
+      ticker.clear();
+    } else if (cmd === 'color') {
+      const region = Number(args && args[0]);
+      const color = parseColorOnly((args && args[1]) || '');
+      if (region && color) doColor(region, color, user.name, { bypassLimit: true });
+    }
+    updateProgress();
+    reportState();
+  }
+
   function handleEffect(ef) {
     lastEventAt = Date.now();
     const key = ef.effect;
@@ -455,7 +485,10 @@ async function boot() {
     const rnd = (n) => Math.floor(Math.random() * n);
     const gifter = ef.event ? userOf(ef.event) : null;
 
-    if (key === 'priority_join') {
+    if (key === 'command') {
+      const cmd = commandFromPayload(payload);
+      if (cmd) runCommand(cmd.name, cmd.args, ef.event);
+    } else if (key === 'priority_join') {
       if (gifter && gifter.userId && turnEngine.addPlayer(gifter, { priority: true })) {
         if (turnEngine.state === 'signup') renderSignup();
       }

@@ -110,6 +110,12 @@ loads it and calls `connectHub(...)` with its slug + key. The **Source** control
 `Hub (live)`, `Demo` or `Off` (see *Controls* above); with no hub reachable it falls back
 to Demo so it is always demoable. Full contract: `docs/HUB_INTEGRATION.md`.
 
+### Chat commands
+Free interactions can trigger effects too. The hub parses chat and routes either a
+**direct effect** (`!wipe` → `wipe_canvas`) or the **generic `command`** effect
+(`{ name, args }`) which the game routes in `src/js/main.js`. The game declares its
+command words in `tikora.manifest.json` (`commands`). Full contract: `docs/COMMANDS.md`.
+
 ## Canvas format & the generator
 
 Canvases are `canvas.svg` + `canvas.json`. The exact rules are in

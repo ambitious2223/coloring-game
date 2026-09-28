@@ -152,7 +152,12 @@ Therefore:
     skip timer (host-set), credits on completion. Premium fills (gold/neon/rainbow/stripes/
     dots) via `premiumPaint`. Effects `priority_join`, `name_artwork`, `sign_artwork`.
     Verified by screenshot: sign-up overlay + a live turn + sections crediting their authors.
-  - Tests: **30 passing** (`npm test`). Syntax check: all files clean.
+  - **Chat commands** (`docs/COMMANDS.md`, `src/js/core/commands.js`): the hub parses chat
+    and routes a direct effect or a generic `command` effect (`{ name, args }`); the game's
+    `runCommand()` handles `join` / `gold` / `wipe` / `color`. Command words declared in
+    `tikora.manifest.json` (`commands`). Contract covers `match_mode`, args, per-user
+    cooldown, who-gating.
+  - Tests: **34 passing** (`npm test`). Syntax check: all files clean.
   - Committed and pushed to GitHub. Registered in Tikora's Game Store (`BUILTIN_GAMES`,
     port 45125) on branch `feat/clash-royale-integration`.
 - **Verified by headless screenshot:** the page renders (canvas + labels + palette + i18n),

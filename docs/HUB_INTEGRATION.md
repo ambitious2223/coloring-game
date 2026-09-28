@@ -58,6 +58,18 @@ Config resolution (first wins): URL query `?game=&key=&lang=&canvas=` →
 Declared in `tikora.manifest.json` (the hub reads it, so effects appear even when the game
 is offline) and mirrored in `CAPABILITIES` in `src/js/main.js`.
 
+## Chat commands (free triggers)
+
+The hub can trigger an effect from **chat**, not only gifts. Two styles:
+
+- **Direct:** command word → an existing effect key (e.g. `!wipe` → `wipe_canvas`).
+- **Generic:** command → effect `command` with `{ name, args }`; the game routes it in
+  `runCommand()` (`src/js/main.js`). Supported: `join`, `gold`, `wipe`, `color <region> <color>`.
+
+The game declares its command words in `tikora.manifest.json` under `commands`. The full
+protocol (match modes, args `{arg1}`/`{rest}`, per-user cooldown, who-gating) is in
+`docs/COMMANDS.md`.
+
 ## State reported (game -> hub)
 
 `hub.reportState(...)` on changes:

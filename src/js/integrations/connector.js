@@ -81,7 +81,8 @@ export function createSourceManager({ config, capabilities, handlers, samples, n
   }
   function applyAutoSim() {
     stopAutoSim();
-    if (autoSim && active !== 'hub') simTimer = setInterval(simulateNow, intervalMs);
+    // The simulator belongs to Demo only - Off must be truly silent.
+    if (autoSim && active === 'demo') simTimer = setInterval(simulateNow, intervalMs);
   }
 
   async function openHub() {
