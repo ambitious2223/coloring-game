@@ -18,47 +18,65 @@
       <div class="cc-badges">
         <span id="dockStatus" class="cc-status">Connecting…</span>
         <span id="modeBadge" class="cc-badge">Lock</span>
+        <button id="btnControls" class="cc-btn" type="button">Controls</button>
+        <button id="btnLive" class="cc-btn live-btn" type="button">Go Live</button>
       </div>
     </header>
+
+    <div id="testBanner" class="cc-testbanner">TEST MODE — not live</div>
 
     <main class="cc-main">
       <section class="cc-stage">
         <div id="board" class="cc-board"></div>
+        <div class="cc-overlay">
+          <div class="cc-progress">
+            <span id="tProgress" class="cc-progress-label">Progress</span>
+            <div class="cc-bar"><div id="progressBar" class="cc-bar-fill"></div></div>
+            <b id="progressText" class="cc-progress-count">0 / 0</b>
+          </div>
+          <div id="ticker" class="cc-feed"></div>
+        </div>
       </section>
 
       <aside class="cc-panel">
-        <div class="cc-progress">
-          <div class="cc-progress-row">
-            <span id="tProgress">Progress</span>
-            <b id="progressText">0 / 0</b>
-          </div>
-          <div class="cc-bar"><div id="progressBar" class="cc-bar-fill"></div></div>
-        </div>
-
         <h2 id="tPalette">Palette</h2>
         <div id="paletteBar" class="cc-palette"></div>
-
-        <h2 id="tFeed">Live coloring</h2>
-        <div id="ticker" class="cc-feed"></div>
-
-        <p class="cc-hint" id="tHint">Comment: region + color, e.g. 12 green.</p>
+        <p class="cc-hint" id="tHint">Pick a color, then click a region to test.</p>
       </aside>
     </main>
 
-    <div id="dock" class="cc-dock">
-      <div class="cc-dock-inner">
-        <div class="cc-dock-title"><span id="tDock">Host dock</span> <kbd>`</kbd></div>
-        <label><span id="tMode">Mode</span>
-          <select id="dockMode"><option value="lock">Lock</option><option value="chaos">Chaos</option></select>
-        </label>
-        <label><span id="tRegion">Region</span><input id="dockRegion" type="number" min="1" value="1" /></label>
-        <label><span id="tColor">Color</span><select id="dockColor"></select></label>
-        <label><span id="tUser">User</span><input id="dockUser" type="text" value="host" /></label>
-        <button id="dockSend" type="button">Send</button>
-        <button id="dockSimulate" type="button" class="ghost">Simulate</button>
-        <button id="dockReset" type="button" class="ghost">Reset</button>
+    <aside id="controls" class="cc-controls">
+      <div class="cc-controls-head">
+        <span id="tControls">Controls</span>
+        <button id="ctlClose" type="button" class="cc-x" aria-label="Close">✕</button>
       </div>
-    </div>
+
+      <label class="cc-field"><span id="tSource">Source</span>
+        <select id="ctlSource">
+          <option value="hub">Hub (live)</option>
+          <option value="demo">Demo</option>
+          <option value="off">Off</option>
+        </select>
+      </label>
+
+      <label class="cc-check"><input id="ctlAutoSim" type="checkbox" /> <span id="tAutoSim">Auto-simulate</span></label>
+
+      <label class="cc-field"><span id="tMode">Mode</span>
+        <select id="ctlMode"><option value="lock">Lock</option><option value="chaos">Chaos</option></select>
+      </label>
+
+      <div class="cc-controls-row">
+        <button id="ctlSimulate" type="button">Simulate viewer</button>
+        <button id="ctlReset" type="button" class="ghost">Reset</button>
+      </div>
+
+      <div class="cc-controls-send">
+        <label class="cc-field"><span id="tRegion">Region</span><input id="ctlRegion" type="number" min="1" value="1" /></label>
+        <label class="cc-field"><span id="tColor">Color</span><select id="ctlColor"></select></label>
+        <label class="cc-field"><span id="tUser">User</span><input id="ctlUser" type="text" value="host" /></label>
+        <button id="ctlSend" type="button">Send</button>
+      </div>
+    </aside>
 
     <script type="module" src="/js/main.js"></script>
   </body>

@@ -128,14 +128,23 @@ Therefore:
     without owner permission, generate assets locally, never touch antivirus.
   - `scripts/validate-canvas.mjs` — the canvas contract validator.
   - Canvas format, hub manifests (`game.manifest.json`, `tikora.manifest.json`).
-  - Game: SVG board + number labels, palette, live feed, host dock (backtick), lock mode
-    (default) + chaos mode, rate-limiting, EN/TR/AR i18n, hub connector with offline mock.
+  - Game UI: SVG board + number labels, palette, progress bar + horizontal ticker,
+    lock mode (default) + chaos mode, rate-limiting, EN/TR/AR i18n.
+  - **Controls panel** (`src/js/ui/control-panel.js`): a left drawer (header button or `` ` ``)
+    with **Source** (Hub/Demo/Off), auto-simulate, mode, Simulate, Reset, manual send.
+    Click-to-color: pick a palette color then click a region to color it (host test).
+  - **Live mode** (`H` / Go Live button): hides all chrome, leaving canvas + progress +
+    ticker. State persisted. A yellow TEST MODE banner shows when not on the hub.
+  - **Input sources** (`src/js/integrations/connector.js`): swappable hub/demo/off, auto
+    (hub if reachable else demo). The simulator works in any source.
   - Tests: 13 passing (`npm test`). Syntax check: all files clean.
   - Committed and pushed to GitHub. Registered in Tikora's Game Store (`BUILTIN_GAMES`,
     port 45125) on branch `feat/clash-royale-integration`.
 - **Verified by headless screenshot:** the page renders (canvas + labels + palette + i18n),
-  and the mock feed colors regions end-to-end (parser → engine → board → feed → progress),
-  on both the demo canvas and a generated Voronoi canvas.
+  the controls panel and TEST banner show in setup mode, **Live mode hides all chrome**
+  (canvas + progress + ticker only), and regions color end-to-end (parser → engine → board
+  → ticker → progress) on both the photo and Voronoi canvases (`filled` count confirmed).
+  Go-live overlay URL is the deferred option (single-window mode chosen for now).
 - **Not built yet:** chaos-mode-specific gift tools beyond the current set, snapshot/
   timelapse, sounds, the `target`-color reveal mode.
 - **Hub integration:** contract ready (`docs/HUB_INTEGRATION.md`), **no gift→effect

@@ -72,6 +72,12 @@ export function createBoard({ mount, svgText, meta, palette, onRegionClick, minL
       p.classList.add('cc-flash');
       setTimeout(() => p.classList.remove('cc-flash'), 650);
     },
+    select(number) {
+      paths.forEach((p, n) => p.classList.toggle('cc-selected', n === number));
+    },
+    clearSelection() {
+      paths.forEach((p) => p.classList.remove('cc-selected'));
+    },
     reset() {
       paths.forEach((p) => {
         p.style.fill = '';

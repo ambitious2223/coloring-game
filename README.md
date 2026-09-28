@@ -38,8 +38,25 @@ without opening a browser; it is the launcher the Tikora hub uses.
 5. **Gifts** (mapped by the streamer in Tikora) fire effects like *wipe canvas*,
    *multi-fill*, *premium color*, or *overwrite a locked region*.
 
-Press **`** (backquote) for the **host dock**: switch modes, inject a color, simulate a
-random viewer, or reset — all without a live stream.
+## Controls, testing & going live
+
+The **Controls** panel (button in the header, or the `` ` `` key) is the streamer surface:
+
+- **Source** — `Hub (live)` receives real TikTok events; `Demo` runs a local simulator
+  (auto-simulate on); `Off` is silent. Opening the game picks Hub if reachable, else Demo.
+- **Mode** — Lock / Chaos. **Simulate viewer**, **Reset**, and a manual region+color send.
+- **A yellow "TEST MODE" banner** shows whenever you are not on the live hub.
+
+**Testing without a stream:** click a palette color, then click a region — it colors
+instantly (host action, ignores lock/cooldown). That's the fastest way to see it working.
+
+**Going live (hide all chrome):** press the **Go Live** button or the **`H`** key. This
+hides the header, palette, panel and controls, leaving only the **canvas + progress +
+ticker** — the clean view to capture. Press `H` again to exit. The choice is remembered.
+
+> Single-window note: with an OBS **Browser Source** the page isn't clickable, so the
+> practical setup is a normal browser window captured by OBS, toggling **Live** before you
+> start. A dedicated non-interactive overlay URL can be added later if you want it.
 
 ## Verify before trusting it
 
@@ -58,10 +75,10 @@ scripts/
   gen-demo-canvas.mjs  placeholder generator (until the real one lands)
 src/
   index.html, css/     the page
-  js/config.js         ?game=&key=&lang=&canvas= -> runtime config
+  js/config.js         ?game=&key=&lang=&canvas=&source=&live= -> runtime config
   js/core/             DOM-free logic: engine, parser, palette, rate-limit
-  js/ui/               board (SVG), palette bar, feed, host dock
-  js/integrations/     hub connector + offline mock
+  js/ui/               board (SVG), palette bar, ticker, control panel
+  js/integrations/     swappable input sources (hub / demo / off)
   js/i18n/             en / tr / ar (RTL for Arabic)
   js/data/canvases/    canvas.svg + canvas.json per canvas
 game.manifest.json     hub registration metadata
@@ -72,9 +89,9 @@ docs/                  architecture, canvas format, hub integration
 ## Connecting to the Tikora hub
 
 The hub serves the browser client at `http://127.0.0.1:27016/hub-client.js`; the game
-loads it and calls `connectHub(...)` with its slug + key. With no hub running, the game
-falls back to an offline mock so it is always demoable. Full contract:
-`docs/HUB_INTEGRATION.md`.
+loads it and calls `connectHub(...)` with its slug + key. The **Source** control picks
+`Hub (live)`, `Demo` or `Off` (see *Controls* above); with no hub reachable it falls back
+to Demo so it is always demoable. Full contract: `docs/HUB_INTEGRATION.md`.
 
 ## Canvas format & the generator
 

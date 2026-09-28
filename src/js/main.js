@@ -1,4 +1,4 @@
-// Color Chaos - entry point. Wires config + i18n + engine + UI + hub connector.
+// Color Chaos - entry point. Wires config + i18n + engine + UI + input source.
 import { config, canvasBase } from './config.js';
 import { createI18n } from './i18n/index.js';
 import { buildPalette } from './core/palette.js';
@@ -8,8 +8,8 @@ import { createEngine } from './core/engine.js';
 import { createBoard } from './ui/board.js';
 import { createPaletteBar } from './ui/palette-bar.js';
 import { createTicker } from './ui/ticker.js';
-import { wireHostDock } from './ui/host-dock.js';
-import { connectConnector } from './integrations/connector.js';
+import { wireControlPanel } from './ui/control-panel.js';
+import { createSourceManager } from './integrations/connector.js';
 
 // Effects this game understands - keep in sync with tikora.manifest.json.
 const CAPABILITIES = {
@@ -25,6 +25,15 @@ const CAPABILITIES = {
   ],
 };
 
+const REASON_KEY = {
+  'unknown-region': 'reasonUnknown',
+  'bad-color': 'reasonBadColor',
+  locked: 'reasonLocked',
+  cooldown: 'reasonCooldown',
+  cap: 'reasonCap',
+};
+
+const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 const i18n = createI18n(config.lang);
 document.documentElement.lang = i18n.lang;
 document.documentElement.dir = i18n.dir;
@@ -34,36 +43,35 @@ function setText(id, key) {
   if (el) el.textContent = i18n.t(key);
 }
 
-const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
-
-// Engine reason codes -> i18n keys.
-const REASON_KEY = {
-  'unknown-region': 'reasonUnknown',
-  'bad-color': 'reasonBadColor',
-  locked: 'reasonLocked',
-  cooldown: 'reasonCooldown',
-  cap: 'reasonCap',
-};
-
 async function boot() {
+  // --- static text ---
   setText('tTitle', 'title');
   setText('tSubtitle', 'subtitle');
   setText('tProgress', 'progress');
   setText('tPalette', 'palette');
-  setText('tFeed', 'feed');
   setText('tHint', 'hint');
-  setText('tDock', 'dock');
+  setText('tControls', 'controls');
+  setText('tSource', 'source');
+  setText('tAutoSim', 'autoSim');
   setText('tMode', 'mode');
   setText('tRegion', 'region');
   setText('tColor', 'color');
   setText('tUser', 'user');
-  document.getElementById('dockSend').textContent = i18n.t('send');
-  document.getElementById('dockSimulate').textContent = i18n.t('simulate');
-  document.getElementById('dockReset').textContent = i18n.t('reset');
-  const modeSel = document.getElementById('dockMode');
+  setText('testBanner', 'testMode');
+  document.getElementById('btnControls').textContent = i18n.t('controls');
+  document.getElementById('ctlSimulate').textContent = i18n.t('simulateViewer');
+  document.getElementById('ctlReset').textContent = i18n.t('resetCanvas');
+  document.getElementById('ctlSend').textContent = i18n.t('send');
+
+  const srcSel = document.getElementById('ctlSource');
+  srcSel.options[0].textContent = i18n.t('sourceHub');
+  srcSel.options[1].textContent = i18n.t('sourceDemo');
+  srcSel.options[2].textContent = i18n.t('sourceOff');
+  const modeSel = document.getElementById('ctlMode');
   modeSel.options[0].textContent = i18n.t('lock');
   modeSel.options[1].textContent = i18n.t('chaos');
 
+  // --- canvas ---
   let meta;
   let svgText;
   try {
@@ -88,16 +96,18 @@ async function boot() {
     mode: 'lock',
   });
   const limiter = createRateLimiter({ cooldownMs: 4000, shareCap: 0 });
-  let connector = null;
+
+  let selectedColor = null;
+  let lastEventAt = 0;
+  let live = false;
+  let sourceManager = null;
 
   const board = createBoard({
     mount: document.getElementById('board'),
     svgText,
     meta,
     palette,
-    onRegionClick: (n) => {
-      if (engine.has(n)) regionInput.value = String(n);
-    },
+    onRegionClick: (n) => handleRegionClick(n),
   });
 
   const paletteBar = createPaletteBar({
@@ -105,20 +115,21 @@ async function boot() {
     palette,
     i18n,
     onPick: (c) => {
-      document.getElementById('dockColor').value = String(c.index);
+      selectedColor = c.index;
       paletteBar.highlight(c.index);
+      document.getElementById('ctlColor').value = String(c.index);
     },
   });
 
   const ticker = createTicker({ root: document.getElementById('ticker'), i18n });
 
-  const colorSel = document.getElementById('dockColor');
+  const colorSel = document.getElementById('ctlColor');
   colorSel.innerHTML = palette
     .map((c) => `<option value="${c.index}">${c.index} - ${i18n.t(c.nameKey)}</option>`)
     .join('');
 
-  const regionInput = document.getElementById('dockRegion');
-  regionInput.max = String(engine.total());
+  const regionEl = document.getElementById('ctlRegion');
+  regionEl.max = String(engine.total());
 
   function updateProgress() {
     const p = engine.progress();
@@ -127,8 +138,8 @@ async function boot() {
   }
 
   function reportState() {
-    if (connector) {
-      connector.reportState({ ready: true, phase: 'playing', canvas: config.canvas, ...engine.snapshot() });
+    if (sourceManager) {
+      sourceManager.reportState({ ready: true, phase: live ? 'live' : 'setup', canvas: config.canvas, ...engine.snapshot() });
     }
   }
 
@@ -143,14 +154,25 @@ async function boot() {
 
     board.setColor(res.region.number, color);
     board.flash(res.region.number);
-    const c = palette[color - 1];
-    ticker.add({ user, region: res.region.number, hex: c.hex, verb: i18n.t('verb' + cap(res.verb)) });
+    ticker.add({ user, region: res.region.number, hex: palette[color - 1].hex, verb: i18n.t('verb' + cap(res.verb)) });
     updateProgress();
     reportState();
     return res;
   }
 
+  // Clicking the board: if a color is picked, color the region (host test);
+  // otherwise just select it and load it into the manual send form.
+  function handleRegionClick(n) {
+    if (selectedColor != null) {
+      doColor(n, selectedColor, 'host', { bypassLimit: true });
+    } else {
+      board.select(n);
+      regionEl.value = String(n);
+    }
+  }
+
   function handleChat(ev) {
+    lastEventAt = Date.now();
     const user = ev.username || ev.user || ev.nickname || 'viewer';
     const text = ev.message != null ? ev.message : ev.comment != null ? ev.comment : ev.text || '';
     const parsed = parseChat(text, palette, colorIndex);
@@ -159,6 +181,7 @@ async function boot() {
   }
 
   function handleEffect(ef) {
+    lastEventAt = Date.now();
     const key = ef.effect;
     const payload = ef.payload || {};
     const count = Math.max(1, Number(payload.count) || 1);
@@ -208,16 +231,20 @@ async function boot() {
     }
 
     updateProgress();
-    if (connector) connector.ackEffect(ef.id, { ok: true, effect: key });
+    if (sourceManager) sourceManager.ackEffect(ef.id, { ok: true, effect: key });
     reportState();
   }
 
-  const dock = wireHostDock({
-    engine,
-    onSubmit: (region, color, user) => {
-      const res = doColor(region, color, user, { bypassLimit: true });
-      if (!res.ok) dock.setStatus(i18n.t(REASON_KEY[res.reason] || 'reasonUnknown'), 'warn');
+  const controlPanel = wireControlPanel({
+    i18n,
+    onSource: (m) => sourceManager.setMode(m),
+    onMode: (m) => {
+      engine.setMode(m);
+      document.getElementById('modeBadge').textContent = i18n.t(m);
+      reportState();
     },
+    onSimulate: () => sourceManager.simulateNow(),
+    onAutoSim: (v) => sourceManager.setAutoSim(v),
     onReset: () => {
       engine.clearAll();
       board.reset();
@@ -226,37 +253,127 @@ async function boot() {
       updateProgress();
       reportState();
     },
-    onSimulate: () => {
-      const user = 'sim' + (100 + Math.floor(Math.random() * 900));
-      const region = 1 + Math.floor(Math.random() * engine.total());
-      const color = 1 + Math.floor(Math.random() * palette.length);
-      doColor(region, color, user);
+    onManualSend: (region, color, user) => {
+      const res = doColor(region, color, user, { bypassLimit: true });
+      if (!res.ok) controlPanel.setStatus(i18n.t(REASON_KEY[res.reason] || 'reasonUnknown'), 'warn');
     },
-    onModeChange: (m) => {
-      engine.setMode(m);
-      document.getElementById('modeBadge').textContent = i18n.t(m);
-      reportState();
-    },
+    onToggleLive: () => setLive(!live),
   });
 
+  function updateStatus() {
+    const active = sourceManager ? sourceManager.active : 'off';
+    let text = i18n.t('statusOff');
+    let cls = '';
+    if (active === 'hub') {
+      const waiting = Date.now() - lastEventAt > 6000;
+      text = i18n.t(waiting ? 'statusHubWaiting' : 'statusHubLive');
+      cls = waiting ? 'ok' : 'ok';
+    } else if (active === 'demo') {
+      text = i18n.t('statusDemo');
+      cls = 'mock';
+    }
+    controlPanel.setStatus(text, cls);
+    document.body.classList.toggle('test', active !== 'hub');
+    if (srcSel.value !== active && (active === 'hub' || active === 'demo' || active === 'off')) {
+      srcSel.value = active;
+    }
+  }
+
+  function setLive(next) {
+    live = !!next;
+    document.body.classList.toggle('live', live);
+    controlPanel.setLive(live);
+    try {
+      localStorage.setItem('cc.live', live ? '1' : '0');
+    } catch {
+      /* ignore */
+    }
+    reportState();
+    updateStatus();
+  }
+
+  // hotkeys: ` toggles controls, H toggles live
+  document.addEventListener('keydown', (e) => {
+    const tag = (document.activeElement && document.activeElement.tagName) || '';
+    const typing = /^(INPUT|SELECT|TEXTAREA)$/.test(tag);
+    if (e.key === 'Escape') {
+      controlPanel.setOpen(false);
+      return;
+    }
+    if (typing) return;
+    if (e.code === 'Backquote') {
+      e.preventDefault();
+      controlPanel.setOpen(!controlPanel.isOpen());
+    } else if (e.key === 'h' || e.key === 'H') {
+      setLive(!live);
+    }
+  });
+
+  // --- build the simulator samples ---
   const samples = [];
   for (let i = 0; i < 24; i++) {
     samples.push(`${1 + Math.floor(Math.random() * engine.total())} ${1 + Math.floor(Math.random() * palette.length)}`);
   }
 
-  updateProgress();
-  document.getElementById('modeBadge').textContent = i18n.t(engine.mode);
-
-  connector = await connectConnector({
+  // --- start source ---
+  sourceManager = createSourceManager({
     config,
     capabilities: CAPABILITIES,
-    onChat: handleChat,
-    onEffect: handleEffect,
-    onStatus: (s) => dock.setStatus(i18n.t(s && s.kind === 'mock' ? 'statusMock' : 'statusHub'), s && s.kind === 'mock' ? 'mock' : 'ok'),
+    handlers: { onChat: handleChat, onEffect: handleEffect, onStatus: () => {} },
     samples,
   });
-  dock.setStatus(i18n.t(connector.kind === 'hub' ? 'statusHub' : 'statusMock'), connector.kind === 'hub' ? 'ok' : 'mock');
+  await sourceManager.setMode(config.source === 'hub' || config.source === 'demo' || config.source === 'off' ? config.source : 'auto');
+
+  // auto-simulate defaults ON (it only runs when not connected to the hub)
+  let autoSim = true;
+  try {
+    const saved = localStorage.getItem('cc.autoSim');
+    if (saved === '0') autoSim = false;
+    else if (saved === '1') autoSim = true;
+  } catch {
+    /* ignore */
+  }
+  autoSim = autoSim; // keep
+  sourceManager.setAutoSim(autoSim);
+  controlPanel.setAutoSim(autoSim);
+
+  controlPanel.setMode(engine.mode);
+  document.getElementById('modeBadge').textContent = i18n.t(engine.mode);
+  controlPanel.setSource(sourceManager.active);
+
+  // controls panel open by default on first run (discoverability)
+  let openControls = true;
+  try {
+    const saved = localStorage.getItem('cc.controlsOpen');
+    if (saved === '0') openControls = false;
+    else if (saved === '1') openControls = true;
+  } catch {
+    /* ignore */
+  }
+  controlPanel.setOpen(openControls);
+
+  // live mode
+  let startLive = config.live;
+  try {
+    if (!startLive && localStorage.getItem('cc.live') === '1') startLive = true;
+  } catch {
+    /* ignore */
+  }
+  setLive(startLive);
+
+  updateProgress();
+  updateStatus();
   reportState();
+  setInterval(updateStatus, 1500);
+
+  // persist auto-sim choice
+  document.getElementById('ctlAutoSim').addEventListener('change', (e) => {
+    try {
+      localStorage.setItem('cc.autoSim', e.target.checked ? '1' : '0');
+    } catch {
+      /* ignore */
+    }
+  });
 }
 
 boot();
