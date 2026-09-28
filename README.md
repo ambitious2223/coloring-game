@@ -91,10 +91,13 @@ GG · Ice Cream Cone · Rose · Blow a kiss · Thumbs Up · Go Popular · TikTok
 Generate pixel canvases offline:
 
 ```bash
-npm run gen:pixel -- --shape heart   # heart | star | smiley | diamond
+npm run gen:pixel -- --shape heart   # see the shape list below
 npm run gen:pixel -- --image "C:\photos\cat.jpg" --grid-size 16 --bg "#ffffff" --out src/js/data/canvases/pixel-cat
 npm run canvases:index      # refresh the canvas index after adding canvases
 ```
+
+Built-in shapes (20): `heart, star, smiley, diamond, triangle, pentagon, hexagon, octagon,
+circle, square, plus, cross, ring, frame, moon, sun, flower, arrow, bolt, chevron`.
 
 **The Canvas dropdown is filtered by mode:** Pixel shows only pixel canvases; Free/Turns show
 only standard ones. **Host controls in Pixel mode:** **left-click** a pixel to fill it with

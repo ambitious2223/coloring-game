@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-28T19:38:54.483Z",
+  "generated": "2026-09-28T19:48:43.605Z",
   "canvases": [
     {
       "id": "blobs-3-80",
@@ -66,10 +66,66 @@
       "regionCount": 15
     },
     {
+      "id": "pixel-arrow",
+      "dir": "pixel-arrow",
+      "type": "pixel",
+      "title": "Pixel Arrow",
+      "numbering": "color",
+      "regionCount": 256
+    },
+    {
+      "id": "pixel-bolt",
+      "dir": "pixel-bolt",
+      "type": "pixel",
+      "title": "Pixel Bolt",
+      "numbering": "color",
+      "regionCount": 256
+    },
+    {
+      "id": "pixel-chevron",
+      "dir": "pixel-chevron",
+      "type": "pixel",
+      "title": "Pixel Chevron",
+      "numbering": "color",
+      "regionCount": 256
+    },
+    {
+      "id": "pixel-circle",
+      "dir": "pixel-circle",
+      "type": "pixel",
+      "title": "Pixel Circle",
+      "numbering": "color",
+      "regionCount": 256
+    },
+    {
+      "id": "pixel-cross",
+      "dir": "pixel-cross",
+      "type": "pixel",
+      "title": "Pixel Cross",
+      "numbering": "color",
+      "regionCount": 256
+    },
+    {
       "id": "pixel-diamond",
       "dir": "pixel-diamond",
       "type": "pixel",
       "title": "Pixel Diamond",
+      "numbering": "color",
+      "regionCount": 256
+    },
+    {
+      "id": "pixel-flower",
+      "dir": "pixel-flower",
+      "type": "pixel",
+      "title": "Pixel Flower",
+      "numbering": "color",
+      "regionCount": 256
+    },
+    {
+      "id": "pixel-frame",
+      "dir": "pixel-frame",
+      "type": "pixel",
+      "title": "Pixel Frame",
       "numbering": "color",
       "regionCount": 256
     },
@@ -82,6 +138,54 @@
       "regionCount": 256
     },
     {
+      "id": "pixel-hexagon",
+      "dir": "pixel-hexagon",
+      "type": "pixel",
+      "title": "Pixel Hexagon",
+      "numbering": "color",
+      "regionCount": 256
+    },
+    {
+      "id": "pixel-moon",
+      "dir": "pixel-moon",
+      "type": "pixel",
+      "title": "Pixel Moon",
+      "numbering": "color",
+      "regionCount": 256
+    },
+    {
+      "id": "pixel-octagon",
+      "dir": "pixel-octagon",
+      "type": "pixel",
+      "title": "Pixel Octagon",
+      "numbering": "color",
+      "regionCount": 256
+    },
+    {
+      "id": "pixel-pentagon",
+      "dir": "pixel-pentagon",
+      "type": "pixel",
+      "title": "Pixel Pentagon",
+      "numbering": "color",
+      "regionCount": 256
+    },
+    {
+      "id": "pixel-plus",
+      "dir": "pixel-plus",
+      "type": "pixel",
+      "title": "Pixel Plus",
+      "numbering": "color",
+      "regionCount": 256
+    },
+    {
+      "id": "pixel-ring",
+      "dir": "pixel-ring",
+      "type": "pixel",
+      "title": "Pixel Ring",
+      "numbering": "color",
+      "regionCount": 256
+    },
+    {
       "id": "pixel-smiley",
       "dir": "pixel-smiley",
       "type": "pixel",
@@ -90,10 +194,34 @@
       "regionCount": 256
     },
     {
+      "id": "pixel-square",
+      "dir": "pixel-square",
+      "type": "pixel",
+      "title": "Pixel Square",
+      "numbering": "color",
+      "regionCount": 256
+    },
+    {
       "id": "pixel-star",
       "dir": "pixel-star",
       "type": "pixel",
       "title": "Pixel Star",
+      "numbering": "color",
+      "regionCount": 256
+    },
+    {
+      "id": "pixel-sun",
+      "dir": "pixel-sun",
+      "type": "pixel",
+      "title": "Pixel Sun",
+      "numbering": "color",
+      "regionCount": 256
+    },
+    {
+      "id": "pixel-triangle",
+      "dir": "pixel-triangle",
+      "type": "pixel",
+      "title": "Pixel Triangle",
       "numbering": "color",
       "regionCount": 256
     },

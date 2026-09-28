@@ -214,6 +214,149 @@ export function smileyGrid(n = 16) {
   return fillFromMask(n, inside, (x, y) => (eyesMouth(x, y) ? 1 : 5));
 }
 
+function regularPoly(cx, cy, R, sides, rot = 0) {
+  const pts = [];
+  for (let i = 0; i < sides; i++) {
+    const a = rot - Math.PI / 2 + (i * 2 * Math.PI) / sides;
+    pts.push([cx + Math.cos(a) * R, cy + Math.sin(a) * R]);
+  }
+  return pts;
+}
+function polyGrid(n, poly, colorFn) {
+  return fillFromMask(n, (x, y) => pointInPoly(x + 0.5, y + 0.5, poly), colorFn);
+}
+const center = (n) => (n - 1) / 2;
+
+export function triangleGrid(n = 16) {
+  const c = center(n);
+  return polyGrid(n, regularPoly(c, c, n * 0.5, 3), rainbowByCol(n));
+}
+export function pentagonGrid(n = 16) {
+  const c = center(n);
+  return polyGrid(n, regularPoly(c, c, n * 0.47, 5), rainbowByCol(n));
+}
+export function hexagonGrid(n = 16) {
+  const c = center(n);
+  return polyGrid(n, regularPoly(c, c, n * 0.47, 6), rainbowByCol(n));
+}
+export function octagonGrid(n = 16) {
+  const c = center(n);
+  return polyGrid(n, regularPoly(c, c, n * 0.5, 8, Math.PI / 8), rainbowByCol(n));
+}
+export function circleGrid(n = 16) {
+  const c = center(n);
+  return fillFromMask(n, (x, y) => Math.hypot(x - c, y - c) <= n * 0.46, rainbowByCol(n));
+}
+export function squareGrid(n = 16) {
+  const c = center(n);
+  return fillFromMask(n, (x, y) => Math.max(Math.abs(x - c), Math.abs(y - c)) <= n * 0.46, rainbowByCol(n));
+}
+export function plusGrid(n = 16) {
+  const c = center(n);
+  const w = n * 0.17;
+  return fillFromMask(n, (x, y) => Math.abs(x - c) <= w || Math.abs(y - c) <= w, rainbowByCol(n));
+}
+export function crossGrid(n = 16) {
+  const c = center(n);
+  const w = n * 0.13;
+  return fillFromMask(n, (x, y) => Math.abs(x - y) <= w || Math.abs(x + y - 2 * c) <= w, rainbowByCol(n));
+}
+export function ringGrid(n = 16) {
+  const c = center(n);
+  return fillFromMask(
+    n,
+    (x, y) => {
+      const d = Math.hypot(x - c, y - c);
+      return d <= n * 0.46 && d >= n * 0.28;
+    },
+    rainbowByCol(n)
+  );
+}
+export function frameGrid(n = 16) {
+  const c = center(n);
+  return fillFromMask(
+    n,
+    (x, y) => {
+      const m = Math.max(Math.abs(x - c), Math.abs(y - c));
+      return m <= n * 0.46 && m >= n * 0.3;
+    },
+    rainbowByCol(n)
+  );
+}
+export function moonGrid(n = 16) {
+  const c = center(n);
+  return fillFromMask(
+    n,
+    (x, y) => Math.hypot(x - c, y - c) <= n * 0.46 && Math.hypot(x - (c - 3), y - (c - 2)) > n * 0.42,
+    () => 5
+  );
+}
+export function sunGrid(n = 16) {
+  const c = center(n);
+  const R = n * 0.3;
+  return fillFromMask(
+    n,
+    (x, y) => {
+      const d = Math.hypot(x - c, y - c);
+      if (d <= R) return true;
+      const a = Math.atan2(y - c, x - c);
+      const step = (2 * Math.PI) / 8;
+      const off = Math.abs((((a % step) + step) % step) - step / 2);
+      return d <= n * 0.46 && off < step * 0.12;
+    },
+    () => 5
+  );
+}
+export function flowerGrid(n = 16) {
+  const c = center(n);
+  return fillFromMask(
+    n,
+    (x, y) => {
+      const d = Math.hypot(x - c, y - c);
+      const a = Math.atan2(y - c, x - c);
+      const bound = n * 0.46 * (0.6 + 0.4 * Math.abs(Math.cos(3 * a)));
+      return d <= bound;
+    },
+    (x, y) => (Math.hypot(x - c, y - c) <= n * 0.14 ? 5 : 9)
+  );
+}
+export function arrowGrid(n = 16) {
+  const poly = [
+    [n * 0.5, n * 0.06],
+    [n * 0.94, n * 0.5],
+    [n * 0.66, n * 0.5],
+    [n * 0.66, n * 0.94],
+    [n * 0.34, n * 0.94],
+    [n * 0.34, n * 0.5],
+    [n * 0.06, n * 0.5],
+  ];
+  return polyGrid(n, poly, rainbowByCol(n));
+}
+export function boltGrid(n = 16) {
+  const poly = [
+    [n * 0.56, n * 0.04],
+    [n * 0.22, n * 0.56],
+    [n * 0.5, n * 0.56],
+    [n * 0.4, n * 0.96],
+    [n * 0.8, n * 0.4],
+    [n * 0.52, n * 0.4],
+  ];
+  return polyGrid(n, poly, () => 5);
+}
+export function chevronGrid(n = 16) {
+  const c = center(n);
+  const w = n * 0.15;
+  return fillFromMask(
+    n,
+    (x, y) => {
+      const t1 = y - (x - c) * 0.9 - c + n * 0.3;
+      const t2 = y + (x - c) * 0.9 - c + n * 0.3;
+      return Math.abs(t1) < w || Math.abs(t2) < w;
+    },
+    rainbowByCol(n)
+  );
+}
+
 /** Grid from an image via sharp (dev-dependency). bgHex marks background cells. */export async function gridFromImage(file, gridSize, palette, bgHex) {
   const mod = await import('sharp').catch(() => null);
   if (!mod || !mod.default) throw new Error('sharp is not installed. Run: npm install --save-dev sharp');
@@ -268,7 +411,28 @@ async function main() {
     title = args.title || id;
   } else {
     const shape = String(args.shape || 'heart');
-    const builders = { heart: heartGrid, star: starGrid, smiley: smileyGrid, diamond: diamondGrid };
+    const builders = {
+      heart: heartGrid,
+      star: starGrid,
+      smiley: smileyGrid,
+      diamond: diamondGrid,
+      triangle: triangleGrid,
+      pentagon: pentagonGrid,
+      hexagon: hexagonGrid,
+      octagon: octagonGrid,
+      circle: circleGrid,
+      square: squareGrid,
+      plus: plusGrid,
+      cross: crossGrid,
+      ring: ringGrid,
+      frame: frameGrid,
+      moon: moonGrid,
+      sun: sunGrid,
+      flower: flowerGrid,
+      arrow: arrowGrid,
+      bolt: boltGrid,
+      chevron: chevronGrid,
+    };
     const build = builders[shape];
     if (!build) throw new Error(`Unknown shape "${shape}" (heart|star|smiley|diamond, or --image <file>)`);
     grid = build();
