@@ -62,6 +62,7 @@ async function boot() {
   document.getElementById('ctlSimulate').textContent = i18n.t('simulateViewer');
   document.getElementById('ctlReset').textContent = i18n.t('resetCanvas');
   document.getElementById('ctlSend').textContent = i18n.t('send');
+  setText('liveHintText', 'exitLive');
 
   const srcSel = document.getElementById('ctlSource');
   srcSel.options[0].textContent = i18n.t('sourceHub');
@@ -97,7 +98,7 @@ async function boot() {
   });
   const limiter = createRateLimiter({ cooldownMs: 4000, shareCap: 0 });
 
-  let selectedColor = null;
+  let selectedColor = 1;
   let lastEventAt = 0;
   let live = false;
   let sourceManager = null;
@@ -127,6 +128,11 @@ async function boot() {
   colorSel.innerHTML = palette
     .map((c) => `<option value="${c.index}">${c.index} - ${i18n.t(c.nameKey)}</option>`)
     .join('');
+  // A color is pre-selected so clicking a region colors it immediately.
+  if (colorSel.options.length) {
+    colorSel.value = String(selectedColor);
+    paletteBar.highlight(selectedColor);
+  }
 
   const regionEl = document.getElementById('ctlRegion');
   regionEl.max = String(engine.total());
@@ -279,6 +285,15 @@ async function boot() {
     }
   }
 
+  let liveHintTimer = null;
+  function showLiveHint(ms) {
+    const el = document.getElementById('liveHint');
+    if (!el) return;
+    el.classList.add('show');
+    if (liveHintTimer) clearTimeout(liveHintTimer);
+    liveHintTimer = setTimeout(() => el.classList.remove('show'), ms);
+  }
+
   function setLive(next) {
     live = !!next;
     document.body.classList.toggle('live', live);
@@ -288,25 +303,42 @@ async function boot() {
     } catch {
       /* ignore */
     }
+    if (live) {
+      controlPanel.setOpen(false);
+      // A hidden field could still hold focus and swallow the hotkeys.
+      if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+      showLiveHint(6000);
+    } else {
+      const el = document.getElementById('liveHint');
+      if (el) el.classList.remove('show');
+    }
     reportState();
     updateStatus();
   }
 
-  // hotkeys: ` toggles controls, H toggles live
+  // hotkeys: H toggles Live, ` toggles controls, Escape exits Live / closes controls
   document.addEventListener('keydown', (e) => {
     const tag = (document.activeElement && document.activeElement.tagName) || '';
     const typing = /^(INPUT|SELECT|TEXTAREA)$/.test(tag);
+
     if (e.key === 'Escape') {
-      controlPanel.setOpen(false);
+      if (live) setLive(false);
+      else controlPanel.setOpen(false);
       return;
     }
-    if (typing) return;
-    if (e.code === 'Backquote') {
+    // In Live mode hotkeys must always work (fields are hidden but may hold focus).
+    if (typing && !live) return;
+    if (e.key === 'h' || e.key === 'H') {
+      setLive(!live);
+    } else if (e.code === 'Backquote') {
       e.preventDefault();
       controlPanel.setOpen(!controlPanel.isOpen());
-    } else if (e.key === 'h' || e.key === 'H') {
-      setLive(!live);
     }
+  });
+
+  document.getElementById('liveHint').addEventListener('click', () => setLive(false));
+  document.addEventListener('mousemove', () => {
+    if (live) showLiveHint(2500);
   });
 
   // --- build the simulator samples ---
@@ -321,6 +353,7 @@ async function boot() {
     capabilities: CAPABILITIES,
     handlers: { onChat: handleChat, onEffect: handleEffect, onStatus: () => {} },
     samples,
+    intervalMs: 2200,
   });
   await sourceManager.setMode(config.source === 'hub' || config.source === 'demo' || config.source === 'off' ? config.source : 'auto');
 

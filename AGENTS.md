@@ -134,7 +134,11 @@ Therefore:
     with **Source** (Hub/Demo/Off), auto-simulate, mode, Simulate, Reset, manual send.
     Click-to-color: pick a palette color then click a region to color it (host test).
   - **Live mode** (`H` / Go Live button): hides all chrome, leaving canvas + progress +
-    ticker. State persisted. A yellow TEST MODE banner shows when not on the hub.
+    ticker. **Exit with `H`, `Escape`, or the fading "Exit Live" pill** (top-right; it shows
+    for ~6s on entry and on mouse move, so it isn't captured). Pressing a color first then
+    clicking a region colors it. State persisted. A yellow TEST MODE banner shows when not
+    on the hub. **Never hide the only way back** — that was a bug: the exit control used to
+    live in the hidden header and the `H` key was swallowed by a focused hidden field.
   - **Input sources** (`src/js/integrations/connector.js`): swappable hub/demo/off, auto
     (hub if reachable else demo). The simulator works in any source.
   - Tests: 13 passing (`npm test`). Syntax check: all files clean.
