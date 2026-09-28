@@ -54,7 +54,25 @@
       "key": "sign_artwork",
       "label": "Sign the artwork",
       "kind": "action"
-    }
+    },
+    { "key": "fill_1", "label": "Pixel · fill color 1 (black)", "kind": "action" },
+    { "key": "fill_2", "label": "Pixel · fill color 2 (white)", "kind": "action" },
+    { "key": "fill_3", "label": "Pixel · fill color 3 (red)", "kind": "action" },
+    { "key": "fill_4", "label": "Pixel · fill color 4 (orange)", "kind": "action" },
+    { "key": "fill_5", "label": "Pixel · fill color 5 (yellow)", "kind": "action" },
+    { "key": "fill_6", "label": "Pixel · fill color 6 (green)", "kind": "action" },
+    { "key": "fill_7", "label": "Pixel · fill color 7 (cyan)", "kind": "action" },
+    { "key": "fill_8", "label": "Pixel · fill color 8 (blue)", "kind": "action" },
+    { "key": "fill_9", "label": "Pixel · fill color 9 (magenta)", "kind": "action" },
+    {
+      "key": "fill_brush",
+      "label": "Pixel · fill several cells",
+      "kind": "powerup",
+      "params": [{ "key": "count", "label": "Cells", "type": "number" }]
+    },
+    { "key": "reveal_color", "label": "Pixel · finish a color", "kind": "powerup" },
+    { "key": "reveal_all", "label": "Pixel · complete the mural", "kind": "powerup" },
+    { "key": "golden_pixel", "label": "Pixel · golden cell", "kind": "powerup" }
   ],
   "events": [
     { "key": "gift", "label": "Gift received" },

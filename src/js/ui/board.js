@@ -77,7 +77,75 @@ export function createBoard({ mount, svgText, meta, palette, onRegionClick, minL
 
   const hexOf = (color) => (palette[color - 1] ? palette[color - 1].hex : '#ffffff');
 
+  // --- zoom / pan (wheel to zoom, drag to pan, double-click to reset) ---
+  let vscale = 1;
+  let vtx = 0;
+  let vty = 0;
+  const applyTransform = () => {
+    root.style.transformOrigin = '0 0';
+    root.style.transform = `translate(${vtx}px, ${vty}px) scale(${vscale})`;
+  };
+  const clampScale = (s) => Math.max(1, Math.min(6, s));
+  function resetZoom() {
+    vscale = 1;
+    vtx = 0;
+    vty = 0;
+    applyTransform();
+  }
+  function zoomAt(px, py, factor) {
+    const ns = clampScale(vscale * factor);
+    const k = ns / vscale;
+    vtx = px - k * (px - vtx);
+    vty = py - k * (py - vty);
+    vscale = ns;
+    applyTransform();
+  }
+  function focusViewBox(x, y, scale) {
+    const rect = mount.getBoundingClientRect();
+    const vb = Array.isArray(meta.viewBox) ? meta.viewBox : [0, 0, 1000, 1000];
+    const toCss = rect.width / (vb[2] || 1000);
+    vscale = clampScale(scale || 2.4);
+    vtx = rect.width / 2 - x * toCss * vscale;
+    vty = rect.height / 2 - y * toCss * vscale;
+    applyTransform();
+  }
+  mount.addEventListener(
+    'wheel',
+    (e) => {
+      e.preventDefault();
+      const r = mount.getBoundingClientRect();
+      zoomAt(e.clientX - r.left, e.clientY - r.top, e.deltaY < 0 ? 1.15 : 1 / 1.15);
+    },
+    { passive: false }
+  );
+  let dragging = false;
+  let lastX = 0;
+  let lastY = 0;
+  mount.addEventListener('pointerdown', (e) => {
+    if (vscale <= 1) return;
+    dragging = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+  });
+  window.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    vtx += e.clientX - lastX;
+    vty += e.clientY - lastY;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    applyTransform();
+  });
+  window.addEventListener('pointerup', () => {
+    dragging = false;
+  });
+  mount.addEventListener('dblclick', resetZoom);
+
   return {
+    focusCell(number, scale) {
+      const r = (meta.regions || []).find((x) => x.number === number);
+      if (r && Array.isArray(r.label)) focusViewBox(r.label[0], r.label[1], scale);
+    },
+    resetZoom,
     setColor(number, color) {
       const p = paths.get(number);
       if (p) {

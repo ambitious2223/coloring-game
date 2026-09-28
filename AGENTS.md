@@ -154,10 +154,19 @@ validator + game together).
   handles `join` / `gold` / `wipe` / `color`. Command words are declared in
   `tikora.manifest.json` (`commands`).
   - **On-screen guidance:** an always-on **instruction bar** (`#instrBar`) tells viewers the
-    exact thing to type for the current phase (free / join / waiting / turn / complete), and
-    **toasts** (`#toasts`, capped at 4) announce joins, turn starts, skips, colors and the
-    finish. Both stay visible in Live mode and are i18n'd.
-- **Tests:** **37 passing** (`npm test`); syntax clean.
+    exact thing to type for the current phase (free / join / waiting / turn / pixel /
+    complete), and **toasts** (`#toasts`, capped at 4) announce joins, turn starts, skips,
+    colours and the finish. Both stay visible in Live mode and are i18n'd.
+  - **Pixel mode (paid)** (`core/pixel-engine.js`, `scripts/pixel-to-canvas.mjs`): a pixel
+    canvas (`type:'pixel'`, `numbering:'color'`, background cells = target 0). 9 colours
+    (black, white, 7 rainbow) mapped one-per-gift via effects `fill_1..fill_9`; a gift fills
+    a **random unfilled cell** of its colour; power-ups `reveal_color` / `fill_brush` /
+    `reveal_all` / `golden_pixel`; **milestones** at 25/50/75/100%; a **legend overlay** with
+    animatable trigger icons (bw/glitch/fade); **zoom/pan + auto-focus** on the board.
+    `npm run gen:pixel` builds pixel canvases (procedural heart, or from an image); the
+    canvas index (`canvas-index.json`) drives the Canvas picker + playlist. Switching mode
+    reloads only when the canvas type must change.
+- **Tests:** **46 passing** (`npm test`); syntax clean.
 - **Verified by headless screenshot:** canvas + labels + palette + i18n render; controls +
   TEST banner in setup; Live mode hides chrome; regions color end-to-end (parser → engine →
   board → ticker → progress); a hub-routed `gold` command rendered a premium gradient region.
@@ -177,6 +186,8 @@ npm run serve        # http://localhost:45125
 npm run gen -- --style voronoi --seed 42 --regions 90 --out src/js/data/canvases/my-canvas
 npm run gen:photo -- --image "C:\photos\cat.jpg" --regions 60   # or --dir <folder>
 npm run gen:examples # regenerate the offline example photo canvases (no network)
+npm run gen:pixel -- --shape heart   # or --image <file> --grid-size 16
+npm run canvases:index # rebuild the canvas index after adding canvases
 npm test             # core logic tests (node --test)
 npm run validate     # validate the demo canvas
 npm run validate:all # validate every canvas

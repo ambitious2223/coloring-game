@@ -32,6 +32,19 @@ const CAPABILITIES = {
     { key: 'priority_join', label: 'Priority sign-up' },
     { key: 'name_artwork', label: 'Name the artwork' },
     { key: 'sign_artwork', label: 'Sign the artwork' },
+    { key: 'fill_1', label: 'Pixel fill 1' },
+    { key: 'fill_2', label: 'Pixel fill 2' },
+    { key: 'fill_3', label: 'Pixel fill 3' },
+    { key: 'fill_4', label: 'Pixel fill 4' },
+    { key: 'fill_5', label: 'Pixel fill 5' },
+    { key: 'fill_6', label: 'Pixel fill 6' },
+    { key: 'fill_7', label: 'Pixel fill 7' },
+    { key: 'fill_8', label: 'Pixel fill 8' },
+    { key: 'fill_9', label: 'Pixel fill 9' },
+    { key: 'fill_brush', label: 'Pixel fill brush' },
+    { key: 'reveal_color', label: 'Pixel finish a color' },
+    { key: 'reveal_all', label: 'Pixel complete the mural' },
+    { key: 'golden_pixel', label: 'Pixel golden cell' },
   ],
 };
 
@@ -366,6 +379,7 @@ async function boot() {
     const cells = pixelEngine.fillRandom(color, count);
     if (!cells.length) return 0;
     renderCells(cells);
+    board.focusCell(cells[0].number, 2.4); // auto-zoom to the action
     ticker.add({
       user: user || 'gift',
       region: cells.map((c) => c.number).join(','),

@@ -23,7 +23,20 @@
       "rainbow_sweep": "fill a series of regions with random colors",
       "priority_join": "gift jumps the viewer to the front of the turn queue",
       "name_artwork": "gift sets the artwork title",
-      "sign_artwork": "gift signs the artwork"
+      "sign_artwork": "gift signs the artwork",
+      "fill_1": "pixel mode: fill a cell of color 1 (black)",
+      "fill_2": "pixel mode: fill a cell of color 2 (white)",
+      "fill_3": "pixel mode: fill a cell of color 3 (red)",
+      "fill_4": "pixel mode: fill a cell of color 4 (orange)",
+      "fill_5": "pixel mode: fill a cell of color 5 (yellow)",
+      "fill_6": "pixel mode: fill a cell of color 6 (green)",
+      "fill_7": "pixel mode: fill a cell of color 7 (cyan)",
+      "fill_8": "pixel mode: fill a cell of color 8 (blue)",
+      "fill_9": "pixel mode: fill a cell of color 9 (magenta)",
+      "fill_brush": "pixel mode power-up: fill several cells",
+      "reveal_color": "pixel mode power-up: finish a whole color",
+      "reveal_all": "pixel mode power-up: complete the mural",
+      "golden_pixel": "pixel mode power-up: a golden cell"
     },
     "config": {
       "query": "?game=<slug>&key=<apiKey>&lang=<en|tr|ar>&canvas=<canvas-id>",

@@ -60,6 +60,34 @@ Host controls: Sign-up **Free / Gift**, Open sign-up, Start, Skip, End, **skip s
 colours** (gold / neon / rainbow / stripes / dots), **name the artwork**, **sign the
 artwork**. Map gifts → these effects in the Tikora hub UI.
 
+## Pixel mode (paid)
+
+The monetization mode. A pixel picture where every cell already knows its colour — viewers
+**fill it with gifts** (one gift = one pixel), so the result is predetermined and organized.
+
+1. **9 colors** (black, white, 7 rainbow). Each colour maps to **one gift** in the hub
+   (`fill_1 … fill_9`).
+2. A gift of a colour fills **a random unfilled cell of that colour**; progress is shown as
+   `filled / fillable`.
+3. **Power-ups** (big gifts): `reveal_color` (finish a colour), `fill_brush` (fill several
+   cells), `reveal_all` (complete the mural), `golden_pixel`.
+4. **Milestones** fire at 25/50/75/100% — toasts + celebration.
+5. A **legend overlay** shows the 9 colours with their **trigger icons** (3 animated styles:
+   B&W / glitch / fade — Controls → *Trigger icons*).
+6. **Zoom:** wheel to zoom, drag to pan, auto-zoom to the last filled cell, double-click to
+   reset.
+
+Generate pixel canvases offline:
+
+```bash
+npm run gen:pixel -- --shape heart
+npm run gen:pixel -- --image "C:\photos\cat.jpg" --grid-size 16 --bg "#ffffff" --out src/js/data/canvases/pixel-cat
+npm run canvases:index      # refresh the canvas index after adding canvases
+```
+
+Modes are switchable live (Controls → **Game mode: Free / Turns / Pixel**); the canvas
+auto-pairs per mode and Pixel keeps a playlist in `src/js/data/canvases/index.json`.
+
 ## Controls, testing & going live
 
 The **Controls** panel (button in the header, or the `` ` `` key) is the streamer surface:
