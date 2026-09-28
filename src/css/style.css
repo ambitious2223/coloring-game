@@ -133,8 +133,7 @@ body.test .cc-testbanner { display: block; }
 .cc-svg path.cc-selected { stroke: var(--accent); stroke-width: 4; }
 .cc-svg path.cc-bg { cursor: default; }
 
-.cc-labels { pointer-events: none; }
-.cc-labels text {
+.cc-labels { pointer-events: none; }.cc-labels text {
   font-size: 15px;
   font-weight: 700;
   fill: #4a4a4a;
@@ -429,6 +428,27 @@ body.pixel .cc-panel { display: none; }
 .cc-icon { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; filter: grayscale(1) contrast(1.2); }
 .cc-icon-img { width: 34px; height: 34px; object-fit: contain; }
 .cc-icon-emo { font-size: 26px; line-height: 1; }
+
+/* gift watermarks painted on the pixels (behind the numbers) */
+.cc-watermarks { pointer-events: none; opacity: 0.4; }
+.cc-watermarks.wm-off { display: none; }
+.cc-watermarks.wm-bw image { filter: grayscale(1) contrast(1.5); }
+.cc-watermarks.wm-fade { animation: cc-fade 1.8s ease-in-out infinite; }
+
+/* watermark style bar (in the palette rail) */
+.cc-wmbar { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; flex: 0 0 auto; }
+.cc-wmbar .cc-wmlabel { flex: 0 0 100%; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 2px; }
+.cc-wmbtn {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 9px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+}
+.cc-wmbtn.active { border-color: var(--accent); background: rgba(45, 212, 191, 0.15); color: var(--accent); }
 .cc-legend.ico-bw .cc-icon { filter: grayscale(1) contrast(1.5); }
 .cc-legend.ico-glitch .cc-icon { animation: cc-glitch 1.4s steps(2, end) infinite; }
 .cc-legend.ico-fade .cc-icon { animation: cc-fade 1.6s ease-in-out infinite; }

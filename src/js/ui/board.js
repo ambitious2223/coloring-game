@@ -3,7 +3,7 @@
 // and exposes color/reset/flash operations. Coloring = setting path fill.
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-export function createBoard({ mount, svgText, meta, palette, onRegionClick, minLabelArea = 900, extraDefs = '' }) {
+export function createBoard({ mount, svgText, meta, palette, onRegionClick, minLabelArea = 900, extraDefs = '', watermarks = null }) {
   mount.innerHTML = '';
   const doc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
   const parsed = doc.querySelector('svg');
@@ -53,6 +53,44 @@ export function createBoard({ mount, svgText, meta, palette, onRegionClick, minL
     }
   }
 
+  // Gift watermarks behind the numbers (pixel mode): one image per fillable cell.
+  const wmGroup = document.createElementNS(SVG_NS, 'g');
+  wmGroup.setAttribute('class', 'cc-watermarks wm-off');
+  const wmEls = new Map();
+  if (colorNumbering && watermarks) {
+    for (const r of meta.regions || []) {
+      const t = Number(r.target);
+      if (!t || !Array.isArray(r.label)) continue;
+      const g = watermarks[t];
+      if (!g) continue;
+      const cx = r.label[0];
+      const cy = r.label[1];
+      const s = Math.sqrt(r.area || 0) * 0.66;
+      let node = null;
+      if (g.image) {
+        node = document.createElementNS(SVG_NS, 'image');
+        node.setAttribute('href', g.image);
+        node.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', g.image);
+        node.setAttribute('x', cx - s / 2);
+        node.setAttribute('y', cy - s / 2);
+        node.setAttribute('width', s);
+        node.setAttribute('height', s);
+      } else if (g.icon) {
+        node = document.createElementNS(SVG_NS, 'text');
+        node.setAttribute('x', cx);
+        node.setAttribute('y', cy);
+        node.setAttribute('text-anchor', 'middle');
+        node.setAttribute('dominant-baseline', 'central');
+        node.setAttribute('font-size', s * 0.8);
+        node.textContent = g.icon;
+      }
+      if (node) {
+        wmGroup.appendChild(node);
+        wmEls.set(r.number, node);
+      }
+    }
+  }
+
   const labels = document.createElementNS(SVG_NS, 'g');
   labels.setAttribute('class', 'cc-labels');
   for (const r of meta.regions || []) {
@@ -66,6 +104,7 @@ export function createBoard({ mount, svgText, meta, palette, onRegionClick, minL
     text.textContent = String(colorNumbering ? r.target : r.number);
     labels.appendChild(text);
   }
+  root.appendChild(wmGroup);
   root.appendChild(labels);
 
   if (onRegionClick) {
@@ -85,7 +124,7 @@ export function createBoard({ mount, svgText, meta, palette, onRegionClick, minL
     root.style.transformOrigin = '0 0';
     root.style.transform = `translate(${vtx}px, ${vty}px) scale(${vscale})`;
   };
-  const clampScale = (s) => Math.max(1, Math.min(6, s));
+  const clampScale = (s) => Math.max(1, Math.min(10, s));
   function resetZoom() {
     vscale = 1;
     vtx = 0;
@@ -190,6 +229,22 @@ export function createBoard({ mount, svgText, meta, palette, onRegionClick, minL
       paths.forEach((p) => {
         p.style.fill = '';
         p.classList.remove('cc-filled');
+      });
+      wmEls.forEach((n) => {
+        n.style.display = '';
+      });
+    },
+    setWatermarkStyle(style) {
+      const s = ['off', 'color', 'bw', 'fade'].includes(style) ? style : 'off';
+      wmGroup.setAttribute('class', 'cc-watermarks wm-' + s);
+    },
+    hideWatermark(number) {
+      const n = wmEls.get(number);
+      if (n) n.style.display = 'none';
+    },
+    showAllWatermarks() {
+      wmEls.forEach((n) => {
+        n.style.display = '';
       });
     },
     count() {

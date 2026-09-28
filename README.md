@@ -77,8 +77,14 @@ The monetization mode. A pixel picture where every cell already knows its colour
    many pixels are left**; a color turns ✓ when finished. Icon styles: B&W / glitch / fade
    (Controls → *Trigger icons*). Suggested 1-coin gift wiring: `docs/PIXEL_GIFTS.md`
    (`src/js/data/pixel-gifts.json`).
-6. **Auto camera** (Controls) auto-zooms to each fill; turn it off to keep the full view.
-   Wheel to zoom, drag to pan, double-click to reset.
+6. **Gift on the pixels:** every unfilled pixel shows its color's gift as a watermark (so
+   zooming in shows which gift fills it). Style bar on the palette: **Off / Color / B&W /
+   Fade** — always visible. Watermarks disappear as cells fill.
+7. **Auto camera** (Controls) auto-zooms to each fill; turn it off to keep the full view.
+   Wheel to zoom (up to 10×), drag to pan, double-click to reset.
+
+Suggested 1-coin gift wiring lives in `docs/PIXEL_GIFTS.md` (`src/js/data/pixel-gifts.json`):
+GG · Ice Cream Cone · Rose · Blow a kiss · Thumbs Up · Go Popular · TikTok · Love you · Heart.
 6. **Zoom:** wheel to zoom, drag to pan, auto-zoom to the last filled cell, double-click to
    reset.
 

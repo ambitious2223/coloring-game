@@ -166,10 +166,13 @@ validator + game together).
     `npm run gen:pixel` builds pixel canvases (procedural heart, or from an image); the
     canvas index (`canvas-index.json`) drives the Canvas picker + playlist. Switching mode
     reloads only when the canvas type must change. The palette sits **beside the canvas**
-    (right side, matched to its box height) and shows, per color, the **gift name** (from
-    `src/js/data/pixel-gifts.json`), the gift icon, and **pixels left**. An **Auto camera**
-    toggle (Controls) turns the auto-zoom on/off. Suggested 1-coin gift wiring is in
-    `docs/PIXEL_GIFTS.md`.
+    (right side, matched to its box height) and shows, per color, a **crayon-style chip +
+    number badge**, the **gift image + name** (from `src/js/data/pixel-gifts.json`), and
+    **pixels left**. Every unfilled pixel also shows its color's gift as a **watermark**
+    (style bar on the palette: Off / Color / B&W / Fade, always visible); watermarks hide as
+    cells fill. An **Auto camera** toggle (Controls) controls auto-zoom (max 10×). Suggested
+    1-coin gift wiring is in `docs/PIXEL_GIFTS.md` (GG · Ice Cream Cone · Rose · Blow a kiss ·
+    Thumbs Up · Go Popular · TikTok · Love you · Heart).
 - **Tests:** **46 passing** (`npm test`); syntax clean.
 - **Verified by headless screenshot:** canvas + labels + palette + i18n render; controls +
   TEST banner in setup; Live mode hides chrome; regions color end-to-end (parser → engine →

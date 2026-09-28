@@ -11,7 +11,7 @@ palette beside the canvas.
 | 3 red | `#e6194b` | `fill_3` | Rose | 5655 |
 | 4 orange | `#f58231` | `fill_4` | Blow a kiss | 10716 |
 | 5 yellow | `#ffe119` | `fill_5` | Thumbs Up | 6246 |
-| 6 green | `#3cb44b` | `fill_6` | So Cute | 9355 |
+| 6 green | `#3cb44b` | `fill_6` | Go Popular | 13651 |
 | 7 cyan | `#46f0f0` | `fill_7` | TikTok | 5269 |
 | 8 blue | `#4363d8` | `fill_8` | Love you | 6890 |
 | 9 magenta | `#f032e6` | `fill_9` | Heart | 6247 |

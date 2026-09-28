@@ -191,6 +191,7 @@ async function boot() {
   // Pixel (paid) canvases get a fill engine instead of the region-colour engine.
   let iconStyle = 'bw';
   let autoCam = true;
+  let watermark = 'bw';
 
   // --- state ---
   let selectedColor = 1;
@@ -222,6 +223,13 @@ async function boot() {
   } catch {
     /* ignore */
   }
+  try {
+    const savedWm = localStorage.getItem('cc.watermark');
+    if (['off', 'color', 'bw', 'fade'].includes(savedWm)) watermark = savedWm;
+  } catch {
+    /* ignore */
+  }
+  if (['off', 'color', 'bw', 'fade'].includes(config.watermark)) watermark = config.watermark;
   buildLegend();
 
   const queue = createQueue();
@@ -230,14 +238,19 @@ async function boot() {
 
   const overlayEl = document.getElementById('stageOverlay');
 
+  const watermarks = {};
+  for (const g of pixelGifts) watermarks[g.color] = { image: g.image || '', icon: g.icon || '' };
+
   const board = createBoard({
     mount: document.getElementById('board'),
     svgText,
     meta,
     palette,
     extraDefs: premiumDefs(),
+    watermarks,
     onRegionClick: (n) => handleRegionClick(n),
   });
+  board.setWatermarkStyle(watermark);
   if (pixelEngine) positionRail();
 
   const paletteBar = createPaletteBar({
@@ -396,6 +409,7 @@ async function boot() {
   function renderCell(number, color) {
     board.setColor(number, color);
     board.flash(number);
+    board.hideWatermark(number);
   }
   function renderCells(cells) {
     for (const c of cells) renderCell(c.number, c.color);
@@ -477,10 +491,28 @@ async function boot() {
           `<span class="cc-leg-left" data-color="${c.index}">–</span></span></div>`
       );
     }
-    el.innerHTML = rows.join('');
+    const styles = [['off', 'wmOff'], ['color', 'wmColor'], ['bw', 'wmBw'], ['fade', 'wmFade']];
+    const bar =
+      `<div class="cc-wmbar"><span class="cc-wmlabel">${i18n.t('wmLabel')}</span>` +
+      styles
+        .map(([s, k]) => `<button class="cc-wmbtn${watermark === s ? ' active' : ''}" data-wm="${s}">${i18n.t(k)}</button>`)
+        .join('') +
+      '</div>';
+    el.innerHTML = rows.join('') + bar;
     el.className = 'cc-legend ico-' + iconStyle;
+    el.querySelectorAll('.cc-wmbtn').forEach((b) => b.addEventListener('click', () => setWatermark(b.dataset.wm)));
     updateLegend();
     positionRail();
+  }
+  function setWatermark(style) {
+    watermark = ['off', 'color', 'bw', 'fade'].includes(style) ? style : 'bw';
+    try {
+      localStorage.setItem('cc.watermark', watermark);
+    } catch {
+      /* ignore */
+    }
+    board.setWatermarkStyle(watermark);
+    document.querySelectorAll('#legend .cc-wmbtn').forEach((b) => b.classList.toggle('active', b.dataset.wm === watermark));
   }
   // Put the palette right beside the canvas, matched to the board's box height.
   function positionRail() {

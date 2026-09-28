@@ -24,6 +24,8 @@ export const config = {
   gameMode: params.get('mode') || injected.gameMode || 'free',
   // start hidden (Live mode) with ?live=1
   live: params.get('live') === '1',
+  // gift-watermark style override: ?wm=off|color|bw|fade
+  watermark: params.get('wm') || '',
 };
 
 export const canvasBase = `/js/data/canvases/${config.canvas}/`;
