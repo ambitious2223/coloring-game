@@ -3,7 +3,7 @@
   "name": "Color Chaos",
   "nameEn": "Color Chaos",
   "type": "webapp",
-  "port": 3040,
+  "port": 45125,
   "launch": "start-game.bat",
   "entry": "src/index.html",
   "description": "Collaborative numbered coloring game for TikTok LIVE - viewers comment a region number plus a color; gifts fire color power-ups.",

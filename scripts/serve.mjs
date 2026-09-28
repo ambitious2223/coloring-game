@@ -1,5 +1,5 @@
 // Color Chaos - tiny static server.
-// Serves ./src on http://localhost:3040 (override with PORT).
+// Serves ./src on http://localhost:45125 (override with PORT).
 // No dependencies. Correct MIME types for ES modules + SVG + JSON.
 import http from 'node:http';
 import fs from 'node:fs';
@@ -8,7 +8,7 @@ import url from 'node:url';
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..', 'src');
-const PORT = Number(process.env.PORT) || 3040;
+const PORT = Number(process.env.PORT) || 45125;
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',

@@ -15,7 +15,7 @@ server. Node 20+ (developed on 24). Tests via `node --test`. No framework, no bu
 
 ## 0. Non-negotiable: never claim something works without proving it
 
-1. **Run it.** `npm run serve`, then confirm `http://localhost:3040` loads.
+1. **Run it.** `npm run serve`, then confirm `http://localhost:45125` loads.
 2. **Watch the output** for errors/warnings for a few seconds after start.
 3. **Visual changes:** look at the running page (screenshot or DOM inspection) before
    describing it. Do not describe a UI you have not seen.
@@ -84,7 +84,7 @@ Therefore:
 - **Version:** 0.1.0-alpha (local dev, not released)
 - **Done (this scaffold):**
   - Repo at `C:\dev\color-chaos`, git init, remote `origin` → GitHub `coloring-game`.
-  - `scripts/serve.mjs` static server on **:3040** (verified: /, css, js, canvas all 200).
+  - `scripts/serve.mjs` static server on **:45125** (verified: /, css, js, canvas all 200).
   - `scripts/gen-demo-canvas.mjs` placeholder generator (jittered lattice) → **80-region
     demo canvas**.
   - `scripts/validate-canvas.mjs` — the canvas contract validator (demo canvas **PASS**).
@@ -103,7 +103,7 @@ Therefore:
 ## 7. Quick commands
 
 ```
-npm run serve        # http://localhost:3040
+npm run serve        # http://localhost:45125
 npm test             # core logic tests (node --test)
 npm run validate     # validate the demo canvas
 npm run validate:all # validate every canvas

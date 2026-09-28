@@ -9,13 +9,13 @@ Color Chaos is a game that plugs into the local **Tikora hub**, which connects t
 and routes live events + gift-triggered effects to the game.
 
 - **Slug:** `color-chaos`
-- **Port:** `3040`
+- **Port:** `45125`
 - **No build step:** vanilla HTML/CSS/ES modules served by a small Node server.
 
 ## Run it
 
 ```bash
-npm run serve        # http://localhost:3040
+npm run serve        # http://localhost:45125
 ```
 
 On Windows you can double-click `start-game.bat` (also used by the Tikora hub).
@@ -44,7 +44,7 @@ npm run verify       # validate:all + test
 
 ```
 scripts/
-  serve.mjs            static server (:3040)
+  serve.mjs            static server (:45125)
   validate-canvas.mjs  THE canvas contract (generators must pass this)
   gen-demo-canvas.mjs  placeholder generator (until the real one lands)
 src/

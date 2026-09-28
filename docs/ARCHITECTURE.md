@@ -8,7 +8,7 @@ TikTok LIVE
   -> Tikora hub (Electron app, port 27016)
        - broadcasts events (chat / gift / like / ...)
        - routes gift-triggered effects to this game (by slug + api key)
-  -> Color Chaos (browser, port 3040)
+  -> Color Chaos (browser, port 45125)
        - loads hub-client.js from the hub, calls connectHub(...)
        - onChat  -> parse "region color" -> engine -> board
        - onEffect -> run power-up -> board
@@ -70,5 +70,5 @@ the list in sync between `tikora.manifest.json` and `CAPABILITIES` in `src/js/ma
 
 ## Server
 
-`scripts/serve.mjs` — dependency-free static server over `src/` on port 3040, correct MIME
+`scripts/serve.mjs` — dependency-free static server over `src/` on port 45125, correct MIME
 types for ES modules / SVG / JSON, path-traversal guarded, `Cache-Control: no-store`.

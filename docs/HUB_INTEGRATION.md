@@ -7,7 +7,7 @@ reach the game, and gifts fire in-game effects.
 |---|---|
 | Game slug | `color-chaos` |
 | Type | `webapp` |
-| Port | `3040` |
+| Port | `45125` |
 | Launch | `start-game.bat` (`npm run serve`) |
 | Relay | `ws://127.0.0.1:27016/` |
 | Client | `http://127.0.0.1:27016/hub-client.js` |
@@ -85,7 +85,7 @@ Add a `BUILTIN_GAMES` entry in `electron/data/database.cjs` →
   icon: '🎨',
   description: 'Collaborative numbered coloring game for TikTok LIVE.',
   price: 0,
-  port: 3040,
+  port: 45125,
 }
 ```
 
