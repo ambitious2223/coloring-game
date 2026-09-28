@@ -79,6 +79,22 @@ export function createPixelEngine({ regions, milestones = [0.25, 0.5, 0.75, 1] }
       for (const b of buckets.values()) for (const n of b) all.add(n);
       return mark(takeRandom(all, count));
     },
+    // Host test-fill: colour one specific cell with its target colour.
+    fillCell(number) {
+      const n = Number(number);
+      if (!target.has(n) || filled.has(n)) return [];
+      return mark([n]);
+    },
+    // Host clear: take one filled cell back out (returns its colour or null).
+    unfill(number) {
+      const n = Number(number);
+      if (!filled.has(n)) return null;
+      const color = target.get(n);
+      filled.delete(n);
+      if (!buckets.has(color)) buckets.set(color, new Set());
+      buckets.get(color).add(n);
+      return color;
+    },
     progress() {
       return { filled: filled.size, total, percent: total ? filled.size / total : 0 };
     },

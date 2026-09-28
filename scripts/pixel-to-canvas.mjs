@@ -138,8 +138,83 @@ export function heartGrid() {
   return grid;
 }
 
-/** Grid from an image via sharp (dev-dependency). bgHex marks background cells. */
-export async function gridFromImage(file, gridSize, palette, bgHex) {
+function pointInPoly(px, py, poly) {
+  let inside = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [xi, yi] = poly[i];
+    const [xj, yj] = poly[j];
+    if ((yi > py) !== (yj > py) && px < ((xj - xi) * (py - yi)) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+
+function polygonStar(cx, cy, R, r, points = 5) {
+  const pts = [];
+  for (let i = 0; i < points * 2; i++) {
+    const rad = i % 2 === 0 ? R : r;
+    const a = -Math.PI / 2 + (i * Math.PI) / points;
+    pts.push([cx + Math.cos(a) * rad, cy + Math.sin(a) * rad]);
+  }
+  return pts;
+}
+
+function fillFromMask(n, inside, colorFn) {
+  const grid = [];
+  for (let y = 0; y < n; y++) {
+    const row = [];
+    for (let x = 0; x < n; x++) {
+      if (!inside(x, y)) {
+        row.push(0);
+        continue;
+      }
+      const edge = !inside(x - 1, y) || !inside(x + 1, y) || !inside(x, y - 1) || !inside(x, y + 1);
+      row.push(edge ? 1 : colorFn(x, y));
+    }
+    grid.push(row);
+  }
+  return grid;
+}
+
+const rainbowByCol = (n) => (x) => 3 + Math.min(6, Math.floor((x / (n - 1)) * 7));
+
+/** A 5-point star. */
+export function starGrid(n = 16) {
+  const cx = (n - 1) / 2;
+  const cy = (n - 1) / 2;
+  const poly = polygonStar(cx, cy, n * 0.47, n * 0.2);
+  const color = rainbowByCol(n);
+  return fillFromMask(n, (x, y) => pointInPoly(x + 0.5, y + 0.5, poly), color);
+}
+
+/** A diamond. */
+export function diamondGrid(n = 16) {
+  const cx = (n - 1) / 2;
+  const cy = (n - 1) / 2;
+  const poly = [
+    [cx, 0.5],
+    [n - 0.5, cy],
+    [cx, n - 0.5],
+    [0.5, cy],
+  ];
+  const color = rainbowByCol(n);
+  return fillFromMask(n, (x, y) => pointInPoly(x + 0.5, y + 0.5, poly), color);
+}
+
+/** A smiley face (yellow, black eyes/mouth). */
+export function smileyGrid(n = 16) {
+  const cx = (n - 1) / 2;
+  const cy = (n - 1) / 2;
+  const R = n * 0.46;
+  const inside = (x, y) => Math.hypot(x - cx, y - cy) <= R;
+  const eyesMouth = (x, y) => {
+    const eye = Math.hypot(x - (cx - 2.6), y - (cy - 2)) < 1.2 || Math.hypot(x - (cx + 2.6), y - (cy - 2)) < 1.2;
+    const mouth = y - cy > 1.2 && Math.abs(Math.hypot(x - cx, y - cy) - R * 0.62) < 1.15;
+    return eye || mouth;
+  };
+  return fillFromMask(n, inside, (x, y) => (eyesMouth(x, y) ? 1 : 5));
+}
+
+/** Grid from an image via sharp (dev-dependency). bgHex marks background cells. */export async function gridFromImage(file, gridSize, palette, bgHex) {
   const mod = await import('sharp').catch(() => null);
   if (!mod || !mod.default) throw new Error('sharp is not installed. Run: npm install --save-dev sharp');
   const sharp = mod.default;
@@ -193,10 +268,12 @@ async function main() {
     title = args.title || id;
   } else {
     const shape = String(args.shape || 'heart');
-    if (shape !== 'heart') throw new Error(`Unknown shape "${shape}" (try --shape heart, or --image <file>)`);
-    grid = heartGrid();
-    id = args.id || 'pixel-heart';
-    title = args.title || 'Pixel Heart';
+    const builders = { heart: heartGrid, star: starGrid, smiley: smileyGrid, diamond: diamondGrid };
+    const build = builders[shape];
+    if (!build) throw new Error(`Unknown shape "${shape}" (heart|star|smiley|diamond, or --image <file>)`);
+    grid = build();
+    id = args.id || `pixel-${shape}`;
+    title = args.title || `Pixel ${shape.charAt(0).toUpperCase() + shape.slice(1)}`;
   }
 
   const { svg, json } = buildPixelCanvas({ grid, size, palette, background, id, title });

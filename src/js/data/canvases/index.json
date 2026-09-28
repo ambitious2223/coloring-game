@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-28T12:16:00.599Z",
+  "generated": "2026-09-28T19:38:54.483Z",
   "canvases": [
     {
       "id": "blobs-3-80",
@@ -66,10 +66,34 @@
       "regionCount": 15
     },
     {
+      "id": "pixel-diamond",
+      "dir": "pixel-diamond",
+      "type": "pixel",
+      "title": "Pixel Diamond",
+      "numbering": "color",
+      "regionCount": 256
+    },
+    {
       "id": "pixel-heart",
       "dir": "pixel-heart",
       "type": "pixel",
       "title": "Pixel Heart",
+      "numbering": "color",
+      "regionCount": 256
+    },
+    {
+      "id": "pixel-smiley",
+      "dir": "pixel-smiley",
+      "type": "pixel",
+      "title": "Pixel Smiley",
+      "numbering": "color",
+      "regionCount": 256
+    },
+    {
+      "id": "pixel-star",
+      "dir": "pixel-star",
+      "type": "pixel",
+      "title": "Pixel Star",
       "numbering": "color",
       "regionCount": 256
     },

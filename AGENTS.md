@@ -170,9 +170,13 @@ validator + game together).
     number badge**, the **gift image + name** (from `src/js/data/pixel-gifts.json`), and
     **pixels left**. Every unfilled pixel also shows its color's gift as a **watermark**
     (style bar on the palette: Off / Color / B&W / Fade, always visible); watermarks hide as
-    cells fill. An **Auto camera** toggle (Controls) controls auto-zoom (max 10×). Suggested
-    1-coin gift wiring is in `docs/PIXEL_GIFTS.md` (GG · Ice Cream Cone · Rose · Blow a kiss ·
-    Thumbs Up · Go Popular · TikTok · Love you · Heart).
+    cells fill. An **Auto camera** toggle (Controls) controls auto-zoom (max 10×). The
+    **Canvas dropdown is filtered by mode** (Pixel → pixel canvases only; Free/Turns →
+    standard). Pixel shapes: heart/star/smiley/diamond (`gen:pixel --shape`). Host
+    **left-click fills** a pixel with its correct colour, **right-click clears** it
+    (`pixelEngine.fillCell/unfill`, `board.clear`). Suggested 1-coin gift wiring is in
+    `docs/PIXEL_GIFTS.md` (GG · Ice Cream Cone · Rose · Blow a kiss · Thumbs Up · Go Popular ·
+    TikTok · Love you · Heart).
 - **Tests:** **46 passing** (`npm test`); syntax clean.
 - **Verified by headless screenshot:** canvas + labels + palette + i18n render; controls +
   TEST banner in setup; Live mode hides chrome; regions color end-to-end (parser → engine →

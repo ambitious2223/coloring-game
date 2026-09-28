@@ -91,10 +91,14 @@ GG · Ice Cream Cone · Rose · Blow a kiss · Thumbs Up · Go Popular · TikTok
 Generate pixel canvases offline:
 
 ```bash
-npm run gen:pixel -- --shape heart
+npm run gen:pixel -- --shape heart   # heart | star | smiley | diamond
 npm run gen:pixel -- --image "C:\photos\cat.jpg" --grid-size 16 --bg "#ffffff" --out src/js/data/canvases/pixel-cat
 npm run canvases:index      # refresh the canvas index after adding canvases
 ```
+
+**The Canvas dropdown is filtered by mode:** Pixel shows only pixel canvases; Free/Turns show
+only standard ones. **Host controls in Pixel mode:** **left-click** a pixel to fill it with
+its correct color, **right-click** to clear it. (During a real game, gifts fill the pixels.)
 
 Modes are switchable live (Controls → **Game mode: Free / Turns / Pixel**); the canvas
 auto-pairs per mode and Pixel keeps a playlist in `src/js/data/canvases/index.json`.

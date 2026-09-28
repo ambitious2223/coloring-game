@@ -68,3 +68,15 @@ test('reset restores every cell', () => {
   assert.equal(e.progress().filled, 0);
   assert.equal(e.remaining(1), 3);
 });
+
+test('fillCell fills one specific cell; unfill takes it back', () => {
+  const e = createPixelEngine({ regions });
+  assert.deepEqual(e.fillCell(4), [{ number: 4, color: 2 }]); // region 4 is colour 2
+  assert.equal(e.remaining(2), 1);
+  assert.deepEqual(e.fillCell(4), []); // already filled
+  assert.equal(e.unfill(4), 2);
+  assert.equal(e.remaining(2), 2);
+  assert.equal(e.progress().filled, 0);
+  assert.equal(e.unfill(999), null);
+  assert.deepEqual(e.fillCell(7), []); // background cell
+});

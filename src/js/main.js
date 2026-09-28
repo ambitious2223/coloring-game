@@ -249,6 +249,7 @@ async function boot() {
     extraDefs: premiumDefs(),
     watermarks,
     onRegionClick: (n) => handleRegionClick(n),
+    onRegionRightClick: (n) => handleRegionRightClick(n),
   });
   board.setWatermarkStyle(watermark);
   if (pixelEngine) positionRail();
@@ -549,6 +550,13 @@ async function boot() {
     if (el) el.className = 'cc-legend ico-' + iconStyle;
   }
 
+  function refreshCanvasOptions() {
+    const type = gameMode === 'pixel' ? 'pixel' : 'standard';
+    const list = canvasIndex.filter((c) => c.type === type);
+    const chosen = list.some((c) => c.dir === config.canvas) ? config.canvas : list[0] ? list[0].dir : config.canvas;
+    controlPanel.setCanvasOptions(list.length ? list : [{ dir: config.canvas, title: config.canvas }], chosen);
+  }
+
   // ---- mode / canvas switching (reload only when the canvas TYPE must change) ----
   function reloadParams(obj) {
     const u = new URL(window.location.href);
@@ -726,7 +734,18 @@ async function boot() {
   }
 
   function handleRegionClick(n) {
-    if (gameMode === 'pixel') return; // paid mode: gifts fill pixels, clicks do nothing
+    if (gameMode === 'pixel') {
+      // Host test-fill: left-click fills the pixel with its correct colour.
+      if (!pixelEngine) return;
+      const cells = pixelEngine.fillCell(n);
+      if (cells.length) {
+        renderCells(cells);
+        updateProgress();
+        checkMilestonesAndCelebrate();
+        reportState();
+      }
+      return;
+    }
     if (gameMode === 'turns') {
       board.select(n);
       return;
@@ -736,6 +755,16 @@ async function boot() {
     } else {
       board.select(n);
       regionEl.value = String(n);
+    }
+  }
+
+  function handleRegionRightClick(n) {
+    // Host clear: right-click empties a filled pixel (pixel mode).
+    if (gameMode !== 'pixel' || !pixelEngine) return;
+    if (pixelEngine.unfill(n) != null) {
+      board.clear(n);
+      updateProgress();
+      reportState();
     }
   }
 
@@ -891,6 +920,7 @@ async function boot() {
       hideOverlay();
     }
     refreshInstruction();
+    refreshCanvasOptions();
     reportState();
   }
 
@@ -1140,7 +1170,7 @@ async function boot() {
   controlPanel.setGameMode(gameMode);
   controlPanel.setSignupMode(signupMode);
   controlPanel.setCanvas(config.canvas);
-  controlPanel.setCanvasOptions(canvasIndex.length ? canvasIndex : [{ dir: config.canvas, title: config.canvas }], config.canvas);
+  refreshCanvasOptions();
   controlPanel.setIconStyle(iconStyle);
   controlPanel.setAutoCam(autoCam);
   if (gameMode === 'turns') {

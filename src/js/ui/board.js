@@ -3,7 +3,7 @@
 // and exposes color/reset/flash operations. Coloring = setting path fill.
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-export function createBoard({ mount, svgText, meta, palette, onRegionClick, minLabelArea = 900, extraDefs = '', watermarks = null }) {
+export function createBoard({ mount, svgText, meta, palette, onRegionClick, onRegionRightClick, minLabelArea = 900, extraDefs = '', watermarks = null }) {
   mount.innerHTML = '';
   const doc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
   const parsed = doc.querySelector('svg');
@@ -113,6 +113,14 @@ export function createBoard({ mount, svgText, meta, palette, onRegionClick, minL
       if (path && !path.classList.contains('cc-bg')) onRegionClick(Number(path.dataset.region));
     });
   }
+  if (onRegionRightClick) {
+    root.addEventListener('contextmenu', (e) => {
+      const path = e.target.closest && e.target.closest('path[data-region]');
+      if (!path || path.classList.contains('cc-bg')) return;
+      e.preventDefault();
+      onRegionRightClick(Number(path.dataset.region));
+    });
+  }
 
   const hexOf = (color) => (palette[color - 1] ? palette[color - 1].hex : '#ffffff');
 
@@ -205,6 +213,15 @@ export function createBoard({ mount, svgText, meta, palette, onRegionClick, minL
         p.style.fill = hex;
         p.classList.add('cc-filled');
       }
+    },
+    clear(number) {
+      const p = paths.get(number);
+      if (p) {
+        p.style.fill = '';
+        p.classList.remove('cc-filled');
+      }
+      const w = wmEls.get(number);
+      if (w) w.style.display = '';
     },
     applyPaint(number, paint) {
       const p = paths.get(number);
