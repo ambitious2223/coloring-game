@@ -76,6 +76,22 @@ Output is `PASS`/`FAIL` per canvas with reasons; exit code 0 only when all pass.
 
 ---
 
+## Photo mode (`scripts/photo-to-canvas.mjs`)
+
+Turns a raster image (or a folder of them) into a canvas. Run via
+`npm run gen:photo -- --image <file> [--regions 60]` or `--dir <folder>`.
+
+Pipeline: decode (sharp) → downscale → denoise (median) → **quantize to the game palette**
+(so color names stay meaningful) → 8-connected labeling → 3×3 label-mode filter (kills
+speckle) → merge small regions to the target count → Moore-trace each region's **outer**
+boundary → RDP simplify → polylabel label + area → **spatial numbering**.
+
+Notes:
+- Holes are not represented (contract = one simple polygon per region). Paths are emitted
+  **largest-first** so inner regions paint on top, which restores the correct look.
+- Deterministic (no randomness), so re-running gives identical files.
+- Every output must still pass `validate-canvas.mjs`.
+
 ## The procedural generator (`scripts/generate-svg.mjs`)
 
 Implemented (Voronoi + mosaic/blobs/mandala, deterministic from `--seed`, polylabel

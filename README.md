@@ -82,6 +82,22 @@ npm run validate -- src/js/data/canvases/my-canvas   # or: npm run validate:all
 Styles: `voronoi`, `mosaic`, `blobs`, `mandala`. Add `--targets` for a per-region target
 color. `scripts/gen-demo-canvas.mjs` is a simpler placeholder generator.
 
+### From a photo
+
+Convert any PNG/JPG/WEBP (or a whole folder) into a canvas:
+
+```bash
+npm run gen:photo -- --image "C:\photos\cat.jpg" --regions 60
+npm run gen:photo -- --dir "C:\photos" --regions 60          # batch (one canvas per image)
+```
+
+The pipeline (implemented in `scripts/photo-to-canvas.mjs`): downscale → denoise →
+quantize to the game palette → connected-component labeling → merge small regions to
+`--regions` → trace + simplify each region → number them spatially. Output goes under
+`src/js/data/canvases/photo-<name>/`. Requires the `sharp` dev-dependency (generator only;
+the game itself stays dependency-free). Useful flags: `--palette N`, `--size N`,
+`--epsilon N`, `--no-smooth`.
+
 ## License
 
 Private project — not for distribution.

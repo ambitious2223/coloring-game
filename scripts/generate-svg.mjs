@@ -24,7 +24,12 @@ function parseArgs(argv) {
     size: 1000,
     out: './out',
     palette: 10,
-    targets: false
+    targets: false,
+    // photo mode (delegates to photo-to-canvas.mjs)
+    image: null,
+    dir: null,
+    smooth: true,
+    epsilon: null
   };
 
   for (let i = 2; i < argv.length; i++) {
@@ -41,6 +46,14 @@ function parseArgs(argv) {
       args.out = argv[++i];
     } else if (arg === '--palette' && i + 1 < argv.length) {
       args.palette = parseInt(argv[++i], 10);
+    } else if (arg === '--image' && i + 1 < argv.length) {
+      args.image = argv[++i];
+    } else if (arg === '--dir' && i + 1 < argv.length) {
+      args.dir = argv[++i];
+    } else if (arg === '--epsilon' && i + 1 < argv.length) {
+      args.epsilon = parseFloat(argv[++i]);
+    } else if (arg === '--no-smooth') {
+      args.smooth = false;
     } else if (arg === '--targets') {
       args.targets = true;
     }
@@ -481,8 +494,16 @@ function generatePoints(style, numRegions, size, rng) {
 // 8. MAIN SCRIPT
 // ==========================================
 
-function main() {
+async function main() {
   const args = parseArgs(process.argv);
+
+  // Photo mode: convert a raster image (or a folder of them) into canvases.
+  if (args.style === 'photo' || args.image || args.dir) {
+    const { generatePhotoCanvas } = await import('./photo-to-canvas.mjs');
+    await generatePhotoCanvas(args);
+    return;
+  }
+
   const rng = createPRNG(args.seed);
 
   // 1. Initial point placement
@@ -606,4 +627,7 @@ ${svgPaths.join('\n')}
   fs.writeFileSync(path.join(args.out, 'canvas.json'), jsonContent, 'utf8');
 }
 
-main();
+main().catch((e) => {
+  console.error(e && e.message ? e.message : e);
+  process.exitCode = 1;
+});

@@ -56,6 +56,11 @@ Do not land several features in one unverified sweep.
   triggers which effect is configured by the streamer in the Tikora hub UI.
 - **The canvas format is a contract.** `scripts/validate-canvas.mjs` is the authority; any
   generator (ours or built separately) must pass it. See `docs/CANVAS_FORMAT.md`.
+- **Generators are dev tools; the game stays zero-dependency.** `sharp` is a devDependency
+  used only by `scripts/photo-to-canvas.mjs`. Never import it from `src/`.
+- **Two generators:** `scripts/generate-svg.mjs` (procedural; `--style voronoi|mosaic|
+  blobs|mandala`) and `scripts/photo-to-canvas.mjs` (photo -> canvas, invoked via
+  `--style photo`/`--image`/`--dir`). Keep both deterministic.
 - **Keep `tikora.manifest.json` and the `CAPABILITIES` list in `src/js/main.js` in sync.**
 
 ## 4. Model/credit economy
@@ -89,6 +94,10 @@ Therefore:
   - `scripts/generate-svg.mjs` — the real procedural generator (Voronoi + mosaic/blobs/
     mandala, deterministic from `--seed`, polylabel labels). Canvases: `canvas-voronoi-42`,
     `canvas-mosaic-7`, `canvas-blobs-3`, `canvas-mandala-9`, `canvas-demo` — all **PASS**.
+  - `scripts/photo-to-canvas.mjs` — photo → canvas (quantize to palette, 8-conn labeling,
+    label-mode filter, region merging, Moore tracing, RDP, spatial numbering). Uses the
+    `sharp` devDependency. Verified on a flat-shape image, a cartoon card, and pure noise
+    (worst case: 700×500 noise → exactly 60 regions in ~11s, **PASS**).
   - `scripts/validate-canvas.mjs` — the canvas contract validator.
   - Canvas format, hub manifests (`game.manifest.json`, `tikora.manifest.json`).
   - Game: SVG board + number labels, palette, live feed, host dock (backtick), lock mode
@@ -109,6 +118,7 @@ Therefore:
 ```
 npm run serve        # http://localhost:45125
 npm run gen -- --style voronoi --seed 42 --regions 90 --out src/js/data/canvases/my-canvas
+npm run gen:photo -- --image "C:\photos\cat.jpg" --regions 60   # or --dir <folder>
 npm test             # core logic tests (node --test)
 npm run validate     # validate the demo canvas
 npm run validate:all # validate every canvas

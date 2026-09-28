@@ -64,8 +64,14 @@ the list in sync between `tikora.manifest.json` and `CAPABILITIES` in `src/js/ma
 
 ## Canvas pipeline
 
-`scripts/generate-svg.mjs` (the procedural generator, built in parallel) or the placeholder
-`scripts/gen-demo-canvas.mjs` writes `canvas.svg` + `canvas.json`.
+Three generators write `canvas.svg` + `canvas.json`:
+
+- `scripts/generate-svg.mjs` — procedural (Voronoi / mosaic / blobs / mandala), deterministic
+  from `--seed`.
+- `scripts/photo-to-canvas.mjs` — photo → canvas (`--style photo` / `--image` / `--dir`);
+  quantize → label → merge → trace → simplify. Uses `sharp` (devDependency only).
+- `scripts/gen-demo-canvas.mjs` — simple placeholder.
+
 `scripts/validate-canvas.mjs` is the contract gate. See `docs/CANVAS_FORMAT.md`.
 
 ## Server
