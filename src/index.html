@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Color Chaos</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <header class="cc-header">
+      <div class="cc-brand">
+        <span class="cc-logo">🎨</span>
+        <div>
+          <h1 id="tTitle">Color Chaos</h1>
+          <p id="tSubtitle" class="cc-sub">Comment a region number and a color.</p>
+        </div>
+      </div>
+      <div class="cc-badges">
+        <span id="dockStatus" class="cc-status">Connecting…</span>
+        <span id="modeBadge" class="cc-badge">Lock</span>
+      </div>
+    </header>
+
+    <main class="cc-main">
+      <section class="cc-stage">
+        <div id="board" class="cc-board"></div>
+      </section>
+
+      <aside class="cc-panel">
+        <div class="cc-progress">
+          <div class="cc-progress-row">
+            <span id="tProgress">Progress</span>
+            <b id="progressText">0 / 0</b>
+          </div>
+          <div class="cc-bar"><div id="progressBar" class="cc-bar-fill"></div></div>
+        </div>
+
+        <h2 id="tPalette">Palette</h2>
+        <div id="paletteBar" class="cc-palette"></div>
+
+        <h2 id="tFeed">Live coloring</h2>
+        <div id="ticker" class="cc-feed"></div>
+
+        <p class="cc-hint" id="tHint">Comment: region + color, e.g. 12 green.</p>
+      </aside>
+    </main>
+
+    <div id="dock" class="cc-dock">
+      <div class="cc-dock-inner">
+        <div class="cc-dock-title"><span id="tDock">Host dock</span> <kbd>`</kbd></div>
+        <label><span id="tMode">Mode</span>
+          <select id="dockMode"><option value="lock">Lock</option><option value="chaos">Chaos</option></select>
+        </label>
+        <label><span id="tRegion">Region</span><input id="dockRegion" type="number" min="1" value="1" /></label>
+        <label><span id="tColor">Color</span><select id="dockColor"></select></label>
+        <label><span id="tUser">User</span><input id="dockUser" type="text" value="host" /></label>
+        <button id="dockSend" type="button">Send</button>
+        <button id="dockSimulate" type="button" class="ghost">Simulate</button>
+        <button id="dockReset" type="button" class="ghost">Reset</button>
+      </div>
+    </div>
+
+    <script type="module" src="/js/main.js"></script>
+  </body>
+</html>

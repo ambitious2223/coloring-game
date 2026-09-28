@@ -1,0 +1,31 @@
+{
+  "slug": "color-chaos",
+  "name": "Color Chaos",
+  "nameEn": "Color Chaos",
+  "type": "webapp",
+  "port": 3040,
+  "launch": "start-game.bat",
+  "entry": "src/index.html",
+  "description": "Collaborative numbered coloring game for TikTok LIVE - viewers comment a region number plus a color; gifts fire color power-ups.",
+  "paid": false,
+  "hub": {
+    "protocol": 2,
+    "consumes": ["chat", "gift", "effect"],
+    "emits": ["state"],
+    "effects": {
+      "premium_color": "apply a premium color (gold/neon/rainbow) to a region",
+      "multi_fill": "fill several uncolored regions at once",
+      "clear_region": "clear one region back to white",
+      "wipe_canvas": "clear the whole canvas",
+      "overwrite": "recolor an already-locked region (overrides lock)",
+      "lock_region": "protect a region from overwrite",
+      "rename_region": "label a region with the gifter's name",
+      "rainbow_sweep": "fill a series of regions with random colors"
+    },
+    "config": {
+      "query": "?game=<slug>&key=<apiKey>&lang=<en|tr|ar>&canvas=<canvas-id>",
+      "fallbackKeys": ["window.TIKORA_GAME_CONFIG"]
+    },
+    "locales": ["en", "tr", "ar"]
+  }
+}

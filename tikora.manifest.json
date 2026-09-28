@@ -1,0 +1,45 @@
+{
+  "slug": "color-chaos",
+  "effects": [
+    {
+      "key": "premium_color",
+      "label": "Premium color",
+      "kind": "powerup",
+      "params": [
+        { "key": "color", "label": "Color (gold|neon|rainbow)", "type": "string" }
+      ]
+    },
+    {
+      "key": "multi_fill",
+      "label": "Multi-fill",
+      "kind": "powerup",
+      "params": [
+        { "key": "count", "label": "Regions", "type": "number" }
+      ]
+    },
+    { "key": "clear_region", "label": "Clear one region", "kind": "action" },
+    { "key": "wipe_canvas", "label": "Wipe the whole canvas", "kind": "action" },
+    {
+      "key": "overwrite",
+      "label": "Recolor a locked region",
+      "kind": "powerup",
+      "params": [
+        { "key": "count", "label": "Regions", "type": "number" }
+      ]
+    },
+    { "key": "lock_region", "label": "Protect a region", "kind": "powerup" },
+    { "key": "rename_region", "label": "Name a region", "kind": "powerup" },
+    {
+      "key": "rainbow_sweep",
+      "label": "Rainbow sweep",
+      "kind": "powerup",
+      "params": [
+        { "key": "count", "label": "Regions", "type": "number" }
+      ]
+    }
+  ],
+  "events": [
+    { "key": "gift", "label": "Gift received" },
+    { "key": "comment", "label": "Comment" }
+  ]
+}
