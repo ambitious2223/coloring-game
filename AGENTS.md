@@ -118,9 +118,14 @@ Therefore:
     mandala, deterministic from `--seed`, polylabel labels). Canvases: `canvas-voronoi-42`,
     `canvas-mosaic-7`, `canvas-blobs-3`, `canvas-mandala-9`, `canvas-demo` — all **PASS**.
   - `scripts/photo-to-canvas.mjs` — photo → canvas (quantize to palette, 8-conn labeling,
-    label-mode filter, region merging, Moore tracing, RDP, spatial numbering). Uses the
-    `sharp` devDependency. Verified on a flat-shape image, a cartoon card, and pure noise
-    (worst case: 700×500 noise → exactly 60 regions in ~11s, **PASS**).
+    label-mode filter, region merging, Moore tracing, RDP, spatial numbering, auto-level).
+    Uses the `sharp` devDependency. Verified on a flat-shape image, a cartoon card, and pure
+    noise (worst case: 700×500 noise → exactly 60 regions in ~11s, **PASS**).
+  - `scripts/gen-examples.mjs` — `npm run gen:examples` generates synthetic photos **locally
+    (no network)** with `sharp` and converts them into `photo-demo-sunset/-abstract/-portrait`
+    canvases, then validates all. This is the sanctioned way to get examples.
+  - **Safety policy** (top of this file): no URL download commands, no network fetches
+    without owner permission, generate assets locally, never touch antivirus.
   - `scripts/validate-canvas.mjs` — the canvas contract validator.
   - Canvas format, hub manifests (`game.manifest.json`, `tikora.manifest.json`).
   - Game: SVG board + number labels, palette, live feed, host dock (backtick), lock mode
@@ -142,6 +147,7 @@ Therefore:
 npm run serve        # http://localhost:45125
 npm run gen -- --style voronoi --seed 42 --regions 90 --out src/js/data/canvases/my-canvas
 npm run gen:photo -- --image "C:\photos\cat.jpg" --regions 60   # or --dir <folder>
+npm run gen:examples # regenerate the offline example photo canvases (no network)
 npm test             # core logic tests (node --test)
 npm run validate     # validate the demo canvas
 npm run validate:all # validate every canvas

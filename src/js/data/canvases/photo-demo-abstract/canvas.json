@@ -1,11 +1,11 @@
 {
-  "id": "photo-demo",
-  "title": "demo-scene",
+  "id": "photo-demo-abstract",
+  "title": "demo-abstract",
   "viewBox": [
     0,
     0,
-    1000,
-    667
+    900,
+    675
   ],
   "regionCount": 10,
   "palette": [
@@ -24,92 +24,92 @@
     {
       "number": 1,
       "label": [
-        500,
-        21.5
+        671.2,
+        115.08
       ],
-      "area": 41958,
-      "target": 3
+      "area": 5232,
+      "target": 8
     },
     {
       "number": 2,
       "label": [
-        500,
-        83
+        192.5,
+        146.5
       ],
-      "area": 78921,
-      "target": 2
+      "area": 38283,
+      "target": 10
     },
     {
       "number": 3,
       "label": [
-        74.62,
-        197.62
+        428.29,
+        272.1
       ],
-      "area": 145764,
+      "area": 13466,
       "target": 5
     },
     {
       "number": 4,
       "label": [
-        925.25,
-        319.75
+        104.17,
+        481.98
       ],
-      "area": 25262,
-      "target": 4
+      "area": 153404,
+      "target": 6
     },
     {
       "number": 5,
       "label": [
-        48,
-        320
+        198.32,
+        311.68
       ],
-      "area": 25708,
-      "target": 4
+      "area": 55128,
+      "target": 1
     },
     {
       "number": 6,
       "label": [
-        710.88,
-        309.76
+        652.51,
+        277.83
       ],
-      "area": 2817,
+      "area": 105890,
       "target": 10
     },
     {
       "number": 7,
       "label": [
-        482.34,
-        344.15
+        250.56,
+        410.19
       ],
-      "area": 98869,
-      "target": 2
+      "area": 6131,
+      "target": 8
     },
     {
       "number": 8,
       "label": [
-        980.3,
-        386.34
+        225.21,
+        606.5
       ],
-      "area": 2268,
-      "target": 10
+      "area": 87030,
+      "target": 3
     },
     {
       "number": 9,
       "label": [
-        19.55,
-        386.55
+        427.65,
+        484.65
       ],
-      "area": 2172,
-      "target": 10
+      "area": 88601,
+      "target": 7
     },
     {
       "number": 10,
       "label": [
-        500,
-        548.5
+        810.2,
+        585.59
       ],
-      "area": 235764,
-      "target": 3
+      "area": 47333,
+      "target": 7
     }
   ]
 }

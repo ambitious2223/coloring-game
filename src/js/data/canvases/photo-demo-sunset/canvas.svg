@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600">
+  <g id="regions">
+    <path id="r4" data-number="4" d="M 114.5,102.5 L 286.5,102.5 L 306.5,108.5 L 318.5,116.5 L 319.5,122.5 L 312.5,129.5 L 314.5,131.5 L 899.5,131.5 L 899.5,271.5 L 735.5,272.5 L 699.5,249.5 L 683.5,261.5 L 678.5,259.5 L 656.5,260.5 L 632.5,272.5 L 522.5,271.5 L 520.5,273.5 L 431.5,200.5 L 356.5,273.5 L 354.5,271.5 L 201.5,271.5 L 199.5,273.5 L 170.5,249.5 L 138.5,273.5 L 136.5,271.5 L 0.5,271.5 L 0.5,131.5 L 86.5,131.5 L 87.5,129.5 L 80.5,122.5 L 81.5,116.5 L 93.5,108.5 L 113.5,103.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r15" data-number="15" d="M 0.5,478.5 L 899.5,478.5 L 899.5,599.5 L 0.5,599.5 L 0.5,479.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r14" data-number="14" d="M 0.5,386.5 L 899.5,386.5 L 899.5,477.5 L 0.5,477.5 L 0.5,387.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r11" data-number="11" d="M 429.5,201.5 L 588.5,330.5 L 700.5,250.5 L 882.5,369.5 L 899.5,378.5 L 899.5,385.5 L 0.5,385.5 L 0.5,378.5 L 8.5,374.5 L 169.5,250.5 L 286.5,344.5 L 428.5,202.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r1" data-number="1" d="M 0.5,0.5 L 899.5,0.5 L 899.5,64.5 L 0.5,64.5 L 0.5,1.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r3" data-number="3" d="M 0.5,75.5 L 399.5,75.5 L 384.5,80.5 L 384.5,83.5 L 655.5,83.5 L 655.5,80.5 L 640.5,75.5 L 899.5,75.5 L 899.5,130.5 L 314.5,130.5 L 320.5,122.5 L 319.5,116.5 L 306.5,107.5 L 286.5,101.5 L 114.5,101.5 L 93.5,107.5 L 80.5,116.5 L 79.5,122.5 L 86.5,130.5 L 0.5,130.5 L 0.5,76.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r2" data-number="2" d="M 0.5,65.5 L 899.5,65.5 L 899.5,74.5 L 640.5,74.5 L 640.5,77.5 L 655.5,82.5 L 384.5,82.5 L 399.5,77.5 L 399.5,74.5 L 0.5,74.5 L 0.5,66.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r8" data-number="8" d="M 738.5,272.5 L 899.5,272.5 L 899.5,312.5 L 798.5,313.5 L 737.5,273.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r7" data-number="7" d="M 201.5,272.5 L 354.5,272.5 L 355.5,274.5 L 315.5,313.5 L 248.5,313.5 L 200.5,273.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r9" data-number="9" d="M 0.5,272.5 L 137.5,273.5 L 86.5,313.5 L 0.5,312.5 L 0.5,273.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r12" data-number="12" d="M 801.5,313.5 L 899.5,313.5 L 899.5,377.5 L 896.5,377.5 L 800.5,314.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r5" data-number="5" d="M 522.5,272.5 L 631.5,272.5 L 618.5,287.5 L 609.5,311.5 L 569.5,313.5 L 521.5,273.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r13" data-number="13" d="M 0.5,313.5 L 84.5,314.5 L 2.5,377.5 L 0.5,377.5 L 0.5,314.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r6" data-number="6" d="M 661.5,260.5 L 678.5,260.5 L 681.5,262.5 L 678.5,265.5 L 589.5,329.5 L 570.5,313.5 L 608.5,313.5 L 622.5,283.5 L 639.5,268.5 L 660.5,261.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r10" data-number="10" d="M 251.5,313.5 L 315.5,314.5 L 286.5,343.5 L 250.5,314.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+  </g>
+</svg>

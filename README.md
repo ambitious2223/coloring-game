@@ -12,6 +12,13 @@ and routes live events + gift-triggered effects to the game.
 - **Port:** `45125`
 - **No build step:** vanilla HTML/CSS/ES modules served by a small Node server.
 
+## Safety (no downloads)
+
+This project never downloads anything at runtime, and the tools never fetch from the
+internet. All example/test assets are **generated locally**. Raw URL download commands are
+banned (they trip Windows Defender's ClickFix heuristic and are a real hazard). See the
+"Safety & downloads" rules in `AGENTS.md`.
+
 ## Run it
 
 ```bash
@@ -96,7 +103,17 @@ quantize to the game palette → connected-component labeling → merge small re
 `--regions` → trace + simplify each region → number them spatially. Output goes under
 `src/js/data/canvases/photo-<name>/`. Requires the `sharp` dev-dependency (generator only;
 the game itself stays dependency-free). Useful flags: `--palette N`, `--size N`,
-`--epsilon N`, `--no-smooth`.
+`--epsilon N`, `--no-smooth`, `--no-normalise`.
+
+### Regenerate the bundled examples (offline)
+
+```bash
+npm run gen:examples
+```
+
+Creates a few synthetic "photos" locally with `sharp` (no network at all) and converts them
+into the `photo-demo-*` canvases, then validates every canvas. This is the safe way to get
+examples without touching the internet.
 
 ## License
 

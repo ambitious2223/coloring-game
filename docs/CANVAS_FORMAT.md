@@ -81,6 +81,9 @@ Output is `PASS`/`FAIL` per canvas with reasons; exit code 0 only when all pass.
 Turns a raster image (or a folder of them) into a canvas. Run via
 `npm run gen:photo -- --image <file> [--regions 60]` or `--dir <folder>`.
 
+Offline examples: `npm run gen:examples` generates synthetic photos **locally** (no network)
+and converts them into `photo-demo-*` canvases.
+
 Pipeline: decode (sharp) → downscale → denoise (median) → **quantize to the game palette**
 (so color names stay meaningful) → 8-connected labeling → 3×3 label-mode filter (kills
 speckle) → merge small regions to the target count → Moore-trace each region's **outer**

@@ -10,3 +10,4 @@ Thumbs.db
 
 # Source photos for the generator (never committed; canvases are the output)
 /photos/
+/examples/
