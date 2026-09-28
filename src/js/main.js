@@ -726,6 +726,7 @@ async function boot() {
   }
 
   function handleRegionClick(n) {
+    if (gameMode === 'pixel') return; // paid mode: gifts fill pixels, clicks do nothing
     if (gameMode === 'turns') {
       board.select(n);
       return;
