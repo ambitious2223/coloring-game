@@ -25,7 +25,9 @@ banned (they trip Windows Defender's ClickFix heuristic and are a real hazard). 
 npm run serve        # http://localhost:45125
 ```
 
-On Windows you can double-click `start-game.bat` (also used by the Tikora hub).
+On Windows, double-click **`Color Chaos Game.bat`** — it installs dependencies on first run,
+starts the server, and opens the game in your browser. `start-game.bat` is the same thing
+without opening a browser; it is the launcher the Tikora hub uses.
 
 ## How it plays
 
