@@ -8,7 +8,7 @@ export const config = {
   gameSlug: params.get('game') || injected.gameSlug || 'color-chaos',
   apiKey: params.get('key') || injected.apiKey || '',
   lang: (params.get('lang') || injected.locale || 'en').slice(0, 2),
-  canvas: params.get('canvas') || injected.canvas || 'canvas-demo',
+  canvas: params.get('canvas') || injected.canvas || 'photo-demo-sunset',
   hubUrl: params.get('hub') || injected.hubUrl || 'http://127.0.0.1:27016/',
 };
 
