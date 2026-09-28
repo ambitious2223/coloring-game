@@ -364,8 +364,8 @@ body.live .cc-toasts { top: 62px; }
 }
 body.pixel .cc-legend { display: flex; }
 body.pixel .cc-panel { display: none; }
-.cc-legend .cc-leg-title { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 2px; }
-.cc-legend .cc-leg-row { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.cc-legend .cc-leg-title { flex: 0 0 auto; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 2px; }
+.cc-legend .cc-leg-row { flex: 1 1 0; display: flex; align-items: center; gap: 10px; font-size: 13px; }
 .cc-legend .cc-leg-num { width: 18px; text-align: center; font-weight: 800; color: var(--accent); }
 .cc-legend .cc-leg-sw { width: 18px; height: 18px; border-radius: 5px; border: 1px solid rgba(0, 0, 0, 0.3); }
 .cc-legend .cc-leg-info { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; }
@@ -380,7 +380,9 @@ body.pixel .cc-panel { display: none; }
 .cc-legend .cc-leg-left { font-size: 12px; font-weight: 700; color: var(--text); white-space: nowrap; }
 .cc-legend .cc-leg-row.done { opacity: 0.45; }
 .cc-legend .cc-leg-row.done .cc-leg-left { color: var(--ok); }
-.cc-icon { font-size: 20px; line-height: 1; display: inline-block; filter: grayscale(1) contrast(1.2); }
+.cc-icon { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; filter: grayscale(1) contrast(1.2); }
+.cc-icon-img { width: 34px; height: 34px; object-fit: contain; }
+.cc-icon-emo { font-size: 26px; line-height: 1; }
 .cc-legend.ico-bw .cc-icon { filter: grayscale(1) contrast(1.5); }
 .cc-legend.ico-glitch .cc-icon { animation: cc-glitch 1.4s steps(2, end) infinite; }
 .cc-legend.ico-fade .cc-icon { animation: cc-fade 1.6s ease-in-out infinite; }
@@ -441,7 +443,7 @@ body.pixel .cc-legend {
   gap: 8px;
   max-height: none;
   transform: none;
-  justify-content: flex-start;
+  justify-content: space-between;
   overflow-y: auto;
 }
 

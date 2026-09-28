@@ -1,15 +1,15 @@
 {
-  "note": "Suggested 1-coin gift wiring for Pixel mode. In the hub, map each gift to the matching effect key (fill_1..fill_9). Excludes 'Heart Me'. The game shows these names in the palette.",
+  "note": "Suggested 1-coin gift wiring for Pixel mode. In the hub, map each gift to the matching effect key (fill_1..fill_9). Excludes 'Heart Me'. The game shows these gifts in the palette.",
   "palette": ["#111111", "#ffffff", "#e6194b", "#f58231", "#ffe119", "#3cb44b", "#46f0f0", "#4363d8", "#f032e6"],
   "gifts": [
-    { "color": 1, "fill": "fill_1", "giftId": 6064, "giftName": "GG", "coins": 1 },
-    { "color": 2, "fill": "fill_2", "giftId": 5827, "giftName": "Ice Cream Cone", "coins": 1 },
-    { "color": 3, "fill": "fill_3", "giftId": 5655, "giftName": "Rose", "coins": 1 },
-    { "color": 4, "fill": "fill_4", "giftId": 10716, "giftName": "Blow a kiss", "coins": 1 },
-    { "color": 5, "fill": "fill_5", "giftId": 6246, "giftName": "Thumbs Up", "coins": 1 },
-    { "color": 6, "fill": "fill_6", "giftId": 9355, "giftName": "So Cute", "coins": 1 },
-    { "color": 7, "fill": "fill_7", "giftId": 5269, "giftName": "TikTok", "coins": 1 },
-    { "color": 8, "fill": "fill_8", "giftId": 6890, "giftName": "Love you", "coins": 1 },
-    { "color": 9, "fill": "fill_9", "giftId": 6247, "giftName": "Heart", "coins": 1 }
+    { "color": 1, "fill": "fill_1", "giftId": 6064, "giftName": "GG", "coins": 1, "icon": "🎮", "image": "https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/3f02fa9594bd1495ff4e8aa5ae265eef~tplv-obj.webp" },
+    { "color": 2, "fill": "fill_2", "giftId": 5827, "giftName": "Ice Cream Cone", "coins": 1, "icon": "🍦", "image": "https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/968820bc85e274713c795a6aef3f7c67~tplv-obj.webp" },
+    { "color": 3, "fill": "fill_3", "giftId": 5655, "giftName": "Rose", "coins": 1, "icon": "🌹", "image": "https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/eba3a9bb85c33e017f3648eaf88d7189~tplv-obj.webp" },
+    { "color": 4, "fill": "fill_4", "giftId": 10716, "giftName": "Blow a kiss", "coins": 1, "icon": "😘", "image": "https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/resource/cdb55940740d5c83879b2934f9a7d08e.png~tplv-obj.webp" },
+    { "color": 5, "fill": "fill_5", "giftId": 6246, "giftName": "Thumbs Up", "coins": 1, "icon": "👍", "image": "https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/570a663e27bdc460e05556fd1596771a~tplv-obj.webp" },
+    { "color": 6, "fill": "fill_6", "giftId": 9355, "giftName": "So Cute", "coins": 1, "icon": "🥰", "image": "https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/resource/d40d31241efcf57c630e894bb3007b8a.png~tplv-obj.webp" },
+    { "color": 7, "fill": "fill_7", "giftId": 5269, "giftName": "TikTok", "coins": 1, "icon": "🎵", "image": "https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/802a21ae29f9fae5abe3693de9f874bd~tplv-obj.webp" },
+    { "color": 8, "fill": "fill_8", "giftId": 6890, "giftName": "Love you", "coins": 1, "icon": "❤️", "image": "https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/ab0a7b44bfc140923bb74164f6f880ab~tplv-obj.webp" },
+    { "color": 9, "fill": "fill_9", "giftId": 6247, "giftName": "Heart", "coins": 1, "icon": "💗", "image": "https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/dd300fd35a757d751301fba862a258f1~tplv-obj.webp" }
   ]
 }

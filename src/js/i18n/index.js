@@ -4,7 +4,7 @@
 
 export const ALL_LANGS = ['en', 'tr', 'ar'];
 
-const STRINGS = {
+export const STRINGS = {
   en: {
     title: 'Color Chaos',
     subtitle: 'Viewers comment a region number + a color to paint together.',

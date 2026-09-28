@@ -423,9 +423,25 @@ async function boot() {
   }
 
   // ---- pixel legend (colours -> gift triggers) ----
+  function giftFor(color) {
+    return pixelGifts.find((x) => x.color === color) || null;
+  }
   function giftNameFor(color) {
-    const g = pixelGifts.find((x) => x.color === color);
+    const g = giftFor(color);
     return g ? g.giftName : '';
+  }
+  function giftIconHtml(color) {
+    const g = giftFor(color);
+    if (!g) return '<span class="cc-icon-emo">🎁</span>';
+    if (g.image) {
+      const emo = g.icon || '🎁';
+      return (
+        `<img class="cc-icon-img" src="${g.image}" alt="" loading="lazy" ` +
+        `onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">` +
+        `<span class="cc-icon-emo" style="display:none">${emo}</span>`
+      );
+    }
+    return `<span class="cc-icon-emo">${g.icon || '🎁'}</span>`;
   }
   function buildLegend() {
     const el = document.getElementById('legend');
@@ -440,7 +456,7 @@ async function boot() {
       rows.push(
         `<div class="cc-leg-row" data-color="${c.index}"><span class="cc-leg-num">${c.index}</span>` +
           `<span class="cc-leg-sw" style="background:${c.hex}"></span>` +
-          `<span class="cc-icon" title="${name || 'gift'}">🎁</span>` +
+          `<span class="cc-icon" title="${name || 'gift'}">${giftIconHtml(c.index)}</span>` +
           `<span class="cc-leg-info"><span class="cc-leg-name">${name}</span>` +
           `<span class="cc-leg-left" data-color="${c.index}">–</span></span></div>`
       );
