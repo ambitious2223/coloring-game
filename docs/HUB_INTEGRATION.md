@@ -51,6 +51,9 @@ Config resolution (first wins): URL query `?game=&key=&lang=&canvas=` →
 | `lock_region` | protect a region from overwrite | – |
 | `rename_region` | label a region with the gifter's name | `{ "name": "..." }` |
 | `rainbow_sweep` | fill a series of regions with random colors | `{ "count": 5 }` |
+| `priority_join` | gift jumps the gifter to the front of the turn queue | – |
+| `name_artwork` | set the artwork title | `{ "title": "..." }` |
+| `sign_artwork` | add the gifter's signature to the artwork | – |
 
 Declared in `tikora.manifest.json` (the hub reads it, so effects appear even when the game
 is offline) and mirrored in `CAPABILITIES` in `src/js/main.js`.

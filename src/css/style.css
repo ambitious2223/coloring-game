@@ -241,6 +241,52 @@ body.test .cc-testbanner { display: block; }
 .cc-controls-send { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
 .cc-controls-send button { grid-column: 1 / -1; }
 
+/* ---------- stage overlay: sign-up / spotlight / complete ---------- */
+.cc-stageoverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.cc-stageoverlay.show { display: flex; }
+.cc-card {
+  background: rgba(15, 16, 21, 0.92);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 22px 30px;
+  text-align: center;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.65);
+  min-width: 280px;
+  max-width: 620px;
+  animation: cc-pop 300ms ease;
+}
+@keyframes cc-pop {
+  from { transform: scale(0.92); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.cc-card .cc-avatar { width: 96px; height: 96px; border-radius: 999px; object-fit: cover; border: 3px solid var(--accent); }
+.cc-card .cc-initials {
+  width: 96px; height: 96px; border-radius: 999px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px; font-weight: 800; color: #06231f;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+}
+.cc-card .cc-name { font-size: 22px; font-weight: 800; margin-top: 12px; }
+.cc-card .cc-prompt { font-size: 15px; color: var(--muted); margin-top: 6px; }
+.cc-card .cc-timer { font-size: 13px; color: var(--warn); margin-top: 8px; font-weight: 700; }
+.cc-title { font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.cc-avatarrow { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 14px; max-width: 520px; }
+.cc-mini { width: 44px; height: 44px; border-radius: 999px; object-fit: cover; border: 2px solid rgba(255, 255, 255, 0.25); }
+.cc-mini.init {
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 18px; color: #06231f;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+}
+.cc-madeby { font-size: 14px; color: var(--muted); margin-top: 12px; line-height: 1.5; }
+
 /* ---------- live mode: hide all chrome ---------- */
 body.live .cc-header,
 body.live .cc-panel,

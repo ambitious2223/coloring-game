@@ -36,6 +36,24 @@
       "params": [
         { "key": "count", "label": "Regions", "type": "number" }
       ]
+    },
+    {
+      "key": "priority_join",
+      "label": "Priority sign-up (jump the queue)",
+      "kind": "powerup"
+    },
+    {
+      "key": "name_artwork",
+      "label": "Name the artwork",
+      "kind": "action",
+      "params": [
+        { "key": "title", "label": "Title", "type": "string" }
+      ]
+    },
+    {
+      "key": "sign_artwork",
+      "label": "Sign the artwork",
+      "kind": "action"
     }
   ],
   "events": [

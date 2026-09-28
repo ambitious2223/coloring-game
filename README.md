@@ -38,6 +38,23 @@ without opening a browser; it is the launcher the Tikora hub uses.
 5. **Gifts** (mapped by the streamer in Tikora) fire effects like *wipe canvas*,
    *multi-fill*, *premium color*, or *overwrite a locked region*.
 
+## Turn relay mode (collective mural)
+
+A calmer, co-creative mode (Controls → **Game mode: Turns**):
+
+1. **Sign-up** — viewers comment `join` (or send the priority gift) and appear as avatars.
+2. **Turns** — the queue loops round-robin. Each turn the current player's **photo +
+   nickname** flies in, they **pick a colour 1–10**, and the **next section** fills with it,
+   credited to them. Two people can fill the whole mural by alternating.
+3. **Skip** — after the host-set timeout the turn passes; the next player colours that same
+   section.
+4. **Complete** — when the canvas is full, a "made by" roll credits everyone.
+
+Host controls: Sign-up **Free / Gift**, Open sign-up, Start, Skip, End, **skip seconds**,
+**regions per turn** (1–6). Paid extras (via gifts): **priority sign-up**, **premium
+colours** (gold / neon / rainbow / stripes / dots), **name the artwork**, **sign the
+artwork**. Map gifts → these effects in the Tikora hub UI.
+
 ## Controls, testing & going live
 
 The **Controls** panel (button in the header, or the `` ` `` key) is the streamer surface:

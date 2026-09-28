@@ -36,6 +36,7 @@
           </div>
           <div id="ticker" class="cc-feed"></div>
         </div>
+        <div id="stageOverlay" class="cc-stageoverlay"></div>
       </section>
 
       <aside class="cc-panel">
@@ -65,9 +66,31 @@
         <select id="ctlMode"><option value="lock">Lock</option><option value="chaos">Chaos</option></select>
       </label>
 
+      <label class="cc-field"><span id="tGameMode">Game mode</span>
+        <select id="ctlGameMode"><option value="free">Free</option><option value="turns">Turns</option></select>
+      </label>
+
+      <label class="cc-field"><span id="tSignupMode">Sign-up</span>
+        <select id="ctlSignupMode"><option value="free">Free</option><option value="gift">Gift</option></select>
+      </label>
+
       <div class="cc-controls-row">
-        <button id="ctlSimulate" type="button">Simulate viewer</button>
+        <button id="ctlSimulate" type="button" class="ghost">Simulate viewer</button>
         <button id="ctlReset" type="button" class="ghost">Reset</button>
+      </div>
+
+      <div class="cc-controls-row">
+        <button id="ctlOpenSignup" type="button" class="ghost">Open sign-up</button>
+        <button id="ctlStart" type="button">Start</button>
+      </div>
+      <div class="cc-controls-row">
+        <button id="ctlSkip" type="button" class="ghost">Skip</button>
+        <button id="ctlEnd" type="button" class="ghost">End</button>
+      </div>
+
+      <div class="cc-controls-send">
+        <label class="cc-field"><span id="tSkipSeconds">Skip after (s)</span><input id="ctlSkipSeconds" type="number" min="3" value="20" /></label>
+        <label class="cc-field"><span id="tPerTurn">Regions / turn</span><input id="ctlPerTurn" type="number" min="1" max="6" value="1" /></label>
       </div>
 
       <div class="cc-controls-send">

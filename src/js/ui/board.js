@@ -3,7 +3,7 @@
 // and exposes color/reset/flash operations. Coloring = setting path fill.
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-export function createBoard({ mount, svgText, meta, palette, onRegionClick, minLabelArea = 900 }) {
+export function createBoard({ mount, svgText, meta, palette, onRegionClick, minLabelArea = 900, extraDefs = '' }) {
   mount.innerHTML = '';
   const doc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
   const parsed = doc.querySelector('svg');
@@ -17,6 +17,14 @@ export function createBoard({ mount, svgText, meta, palette, onRegionClick, minL
   parsed.classList.add('cc-svg');
   const root = document.importNode(parsed, true);
   mount.appendChild(root);
+
+  if (extraDefs) {
+    try {
+      root.insertAdjacentHTML('afterbegin', extraDefs);
+    } catch {
+      /* ignore */
+    }
+  }
 
   const paths = new Map();
   root.querySelectorAll('path[id^="r"]').forEach((p) => {
@@ -65,6 +73,13 @@ export function createBoard({ mount, svgText, meta, palette, onRegionClick, minL
         p.style.fill = hex;
         p.classList.add('cc-filled');
       }
+    },
+    applyPaint(number, paint) {
+      const p = paths.get(number);
+      if (!p || !paint) return;
+      p.style.fill = paint.fill;
+      p.style.filter = paint.filter || '';
+      p.classList.add('cc-filled');
     },
     flash(number) {
       const p = paths.get(number);

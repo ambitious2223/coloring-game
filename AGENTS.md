@@ -146,7 +146,13 @@ Therefore:
     live in the hidden header and the `H` key was swallowed by a focused hidden field.
   - **Input sources** (`src/js/integrations/connector.js`): swappable hub/demo/off, auto
     (hub if reachable else demo). The simulator works in any source.
-  - Tests: 13 passing (`npm test`). Syntax check: all files clean.
+  - **Turn relay mode** (`core/sections.js`, `core/queue.js`, `core/turn-engine.js`,
+    `core/fills.js`): round-robin circular queue (2 people can fill a whole mural), sections
+    filled centre-outward, spotlight card (avatar + name + "pick a color 1–10" + countdown),
+    skip timer (host-set), credits on completion. Premium fills (gold/neon/rainbow/stripes/
+    dots) via `premiumPaint`. Effects `priority_join`, `name_artwork`, `sign_artwork`.
+    Verified by screenshot: sign-up overlay + a live turn + sections crediting their authors.
+  - Tests: **30 passing** (`npm test`). Syntax check: all files clean.
   - Committed and pushed to GitHub. Registered in Tikora's Game Store (`BUILTIN_GAMES`,
     port 45125) on branch `feat/clash-royale-integration`.
 - **Verified by headless screenshot:** the page renders (canvas + labels + palette + i18n),

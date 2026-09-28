@@ -20,7 +20,10 @@
       "overwrite": "recolor an already-locked region (overrides lock)",
       "lock_region": "protect a region from overwrite",
       "rename_region": "label a region with the gifter's name",
-      "rainbow_sweep": "fill a series of regions with random colors"
+      "rainbow_sweep": "fill a series of regions with random colors",
+      "priority_join": "gift jumps the viewer to the front of the turn queue",
+      "name_artwork": "gift sets the artwork title",
+      "sign_artwork": "gift signs the artwork"
     },
     "config": {
       "query": "?game=<slug>&key=<apiKey>&lang=<en|tr|ar>&canvas=<canvas-id>",
