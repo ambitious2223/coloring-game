@@ -7,3 +7,6 @@ dist/
 Thumbs.db
 .vscode/
 .idea/
+
+# Source photos for the generator (never committed; canvases are the output)
+/photos/

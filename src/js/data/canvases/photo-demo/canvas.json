@@ -1,0 +1,115 @@
+{
+  "id": "photo-demo",
+  "title": "demo-scene",
+  "viewBox": [
+    0,
+    0,
+    1000,
+    667
+  ],
+  "regionCount": 10,
+  "palette": [
+    "#e6194b",
+    "#3cb44b",
+    "#4363d8",
+    "#ffe119",
+    "#f58231",
+    "#911eb4",
+    "#46f0f0",
+    "#f032e6",
+    "#bcf60c",
+    "#fabebe"
+  ],
+  "regions": [
+    {
+      "number": 1,
+      "label": [
+        500,
+        21.5
+      ],
+      "area": 41958,
+      "target": 3
+    },
+    {
+      "number": 2,
+      "label": [
+        500,
+        83
+      ],
+      "area": 78921,
+      "target": 2
+    },
+    {
+      "number": 3,
+      "label": [
+        74.62,
+        197.62
+      ],
+      "area": 145764,
+      "target": 5
+    },
+    {
+      "number": 4,
+      "label": [
+        925.25,
+        319.75
+      ],
+      "area": 25262,
+      "target": 4
+    },
+    {
+      "number": 5,
+      "label": [
+        48,
+        320
+      ],
+      "area": 25708,
+      "target": 4
+    },
+    {
+      "number": 6,
+      "label": [
+        710.88,
+        309.76
+      ],
+      "area": 2817,
+      "target": 10
+    },
+    {
+      "number": 7,
+      "label": [
+        482.34,
+        344.15
+      ],
+      "area": 98869,
+      "target": 2
+    },
+    {
+      "number": 8,
+      "label": [
+        980.3,
+        386.34
+      ],
+      "area": 2268,
+      "target": 10
+    },
+    {
+      "number": 9,
+      "label": [
+        19.55,
+        386.55
+      ],
+      "area": 2172,
+      "target": 10
+    },
+    {
+      "number": 10,
+      "label": [
+        500,
+        548.5
+      ],
+      "area": 235764,
+      "target": 3
+    }
+  ]
+}

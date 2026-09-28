@@ -443,6 +443,7 @@ export async function generatePhotoCanvas(args, log = console.log) {
   const paletteRgb = palette.map(hexToRgb);
   const target = Math.max(8, Number(args.regions) || 60);
   const smooth = args.smooth !== false;
+  const normalise = args.normalise !== false;
   const eps = args.epsilon != null ? Number(args.epsilon) : 1.6;
 
   const images = collectImages(args);
@@ -458,6 +459,7 @@ export async function generatePhotoCanvas(args, log = console.log) {
     const h = Math.max(8, Math.round((meta.height || 0) * scale));
 
     let pipe = sharp(item.file).resize(w, h, { fit: 'fill' }).removeAlpha();
+    if (normalise) pipe = pipe.normalise();
     if (smooth) pipe = pipe.median(3);
     const { data, info } = await pipe.raw().toBuffer({ resolveWithObject: true });
 
@@ -466,6 +468,7 @@ export async function generatePhotoCanvas(args, log = console.log) {
     const cc = connectedComponents(labels, w, h);
     const minArea = Math.max(4, Math.floor((w * h) / (target * 12)));
     const merged = mergeSmallRegions(cc.comp, labels, w, h, target, minArea);
+    log(`[photo] ${path.basename(item.file)}: ${cc.count} components -> ${merged.count} after merge`);
 
     // trace each region
     const raw = [];

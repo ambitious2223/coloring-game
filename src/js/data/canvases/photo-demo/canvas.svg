@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 667">
+  <g id="regions">
+    <path id="r10" data-number="10" d="M 0.5,430.5 L 999.5,430.5 L 999.5,666.5 L 0.5,666.5 L 0.5,431.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r3" data-number="3" d="M 0.5,123.5 L 999.5,123.5 L 999.5,271.5 L 534.5,271.5 L 533.5,273.5 L 479.5,228.5 L 431.5,273.5 L 429.5,271.5 L 0.5,271.5 L 0.5,124.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r7" data-number="7" d="M 477.5,229.5 L 650.5,372.5 L 779.5,284.5 L 999.5,421.5 L 999.5,429.5 L 0.5,429.5 L 0.5,421.5 L 5.5,420.5 L 210.5,279.5 L 322.5,380.5 L 476.5,230.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r2" data-number="2" d="M 0.5,43.5 L 999.5,43.5 L 999.5,122.5 L 0.5,122.5 L 0.5,44.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r1" data-number="1" d="M 0.5,0.5 L 999.5,0.5 L 999.5,42.5 L 0.5,42.5 L 0.5,1.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r5" data-number="5" d="M 0.5,272.5 L 430.5,273.5 L 336.5,365.5 L 309.5,367.5 L 212.5,278.5 L 204.5,281.5 L 80.5,367.5 L 0.5,366.5 L 0.5,273.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r4" data-number="4" d="M 534.5,272.5 L 999.5,272.5 L 999.5,366.5 L 912.5,367.5 L 777.5,283.5 L 762.5,293.5 L 745.5,287.5 L 729.5,286.5 L 717.5,288.5 L 696.5,297.5 L 681.5,310.5 L 673.5,321.5 L 665.5,341.5 L 665.5,361.5 L 655.5,368.5 L 645.5,366.5 L 639.5,362.5 L 534.5,273.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r6" data-number="6" d="M 729.5,287.5 L 745.5,288.5 L 761.5,294.5 L 666.5,361.5 L 665.5,346.5 L 667.5,337.5 L 674.5,321.5 L 682.5,310.5 L 703.5,294.5 L 721.5,288.5 L 728.5,288.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r8" data-number="8" d="M 916.5,367.5 L 999.5,367.5 L 999.5,420.5 L 915.5,368.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+    <path id="r9" data-number="9" d="M 0.5,367.5 L 79.5,368.5 L 3.5,420.5 L 0.5,420.5 L 0.5,368.5 Z" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+  </g>
+</svg>

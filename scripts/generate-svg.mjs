@@ -22,13 +22,14 @@ function parseArgs(argv) {
     seed: '42',
     regions: 90,
     size: 1000,
-    out: './out',
+    out: null,
     palette: 10,
     targets: false,
     // photo mode (delegates to photo-to-canvas.mjs)
     image: null,
     dir: null,
     smooth: true,
+    normalise: true,
     epsilon: null
   };
 
@@ -54,6 +55,8 @@ function parseArgs(argv) {
       args.epsilon = parseFloat(argv[++i]);
     } else if (arg === '--no-smooth') {
       args.smooth = false;
+    } else if (arg === '--no-normalise') {
+      args.normalise = false;
     } else if (arg === '--targets') {
       args.targets = true;
     }
@@ -622,9 +625,10 @@ ${svgPaths.join('\n')}
   ) + '\n';
 
   // 7. Output to disk
-  fs.mkdirSync(args.out, { recursive: true });
-  fs.writeFileSync(path.join(args.out, 'canvas.svg'), svgContent, 'utf8');
-  fs.writeFileSync(path.join(args.out, 'canvas.json'), jsonContent, 'utf8');
+  const outDir = args.out || './out';
+  fs.mkdirSync(outDir, { recursive: true });
+  fs.writeFileSync(path.join(outDir, 'canvas.svg'), svgContent, 'utf8');
+  fs.writeFileSync(path.join(outDir, 'canvas.json'), jsonContent, 'utf8');
 }
 
 main().catch((e) => {

@@ -13,6 +13,29 @@ server. Node 20+ (developed on 24). Tests via `node --test`. No framework, no bu
 
 ---
 
+## Safety & downloads (read first — this outranks everything below)
+
+Windows Defender once raised a false-positive **"Trojan:Win32/ClickFix"** alert because an
+agent ran a command line containing a URL that downloads and writes a file. The owner had
+to deal with the panic. That must never happen again. Hard rules:
+
+1. **Never use download-and-write/execute one-liners.** No `Invoke-WebRequest` / `iwr` /
+   `curl` / `wget` in the same command line as a URL and an output file. No `| iex`, no
+   `-EncodedCommand`, no base64 payloads, no obfuscation, no pipe-to-shell. These match the
+   "ClickFix" malware signature and **will** be quarantined even when completely benign.
+2. **No network downloads without explicit permission.** If a task seems to need a file
+   from the internet, STOP and ask the owner first — what, from where, and why. Prefer
+   first-party, well-known sources only.
+3. **Prefer package managers.** Dependencies come from `npm install` (signed/verified),
+   never from a raw URL.
+4. **Generate assets locally.** For tests and examples, create deterministic assets
+   in-repo (e.g. with `sharp`) instead of downloading them.
+5. **Never touch antivirus.** Do not add exclusions, disable protection, or "allow" a
+   threat to work around a block. If something is blocked, stop and report it.
+6. **Keep commands simple and auditable.** Avoid clever one-liners; write a small script
+   file and run it so the intent is visible.
+7. **If Defender flags anything: stop immediately, do not retry, tell the owner.**
+
 ## 0. Non-negotiable: never claim something works without proving it
 
 1. **Run it.** `npm run serve`, then confirm `http://localhost:45125` loads.
