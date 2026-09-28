@@ -79,6 +79,17 @@ body { display: flex; flex-direction: column; }
   color: #fff;
 }
 
+.cc-lang {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 8px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+}
+
 /* ---------- test banner ---------- */
 .cc-testbanner {
   display: none;

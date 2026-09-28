@@ -3,11 +3,17 @@
 // Tikora injects ?game=<slug>&key=<key> when it launches the game.
 const params = new URLSearchParams(window.location.search);
 const injected = (typeof window !== 'undefined' && window.TIKORA_GAME_CONFIG) || {};
+let savedLang = '';
+try {
+  savedLang = localStorage.getItem('cc.lang') || '';
+} catch {
+  /* ignore */
+}
 
 export const config = {
   gameSlug: params.get('game') || injected.gameSlug || 'color-chaos',
   apiKey: params.get('key') || injected.apiKey || '',
-  lang: (params.get('lang') || injected.locale || 'en').slice(0, 2),
+  lang: (params.get('lang') || savedLang || injected.locale || 'en').slice(0, 2),
   canvas: params.get('canvas') || injected.canvas || 'canvas-mandala',
   hubUrl: params.get('hub') || injected.hubUrl || 'http://127.0.0.1:27016/',
   // direct TikFinity-style bridge WebSocket (backup source)

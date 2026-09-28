@@ -64,6 +64,22 @@ const i18n = createI18n(config.lang);
 document.documentElement.lang = i18n.lang;
 document.documentElement.dir = i18n.dir;
 
+// In-app language switch (EN / TR / AR). Persists and reloads with ?lang=.
+const langSelect = document.getElementById('langSelect');
+if (langSelect) {
+  langSelect.value = i18n.lang;
+  langSelect.addEventListener('change', () => {
+    try {
+      localStorage.setItem('cc.lang', langSelect.value);
+    } catch {
+      /* ignore */
+    }
+    const u = new URL(window.location.href);
+    u.searchParams.set('lang', langSelect.value);
+    window.location.href = u.toString();
+  });
+}
+
 function setText(id, key) {
   const el = document.getElementById(id);
   if (el) el.textContent = i18n.t(key);
