@@ -165,7 +165,11 @@ validator + game together).
     animatable trigger icons (bw/glitch/fade); **zoom/pan + auto-focus** on the board.
     `npm run gen:pixel` builds pixel canvases (procedural heart, or from an image); the
     canvas index (`canvas-index.json`) drives the Canvas picker + playlist. Switching mode
-    reloads only when the canvas type must change.
+    reloads only when the canvas type must change. The palette sits **beside the canvas**
+    (right side, matched to its box height) and shows, per color, the **gift name** (from
+    `src/js/data/pixel-gifts.json`), the gift icon, and **pixels left**. An **Auto camera**
+    toggle (Controls) turns the auto-zoom on/off. Suggested 1-coin gift wiring is in
+    `docs/PIXEL_GIFTS.md`.
 - **Tests:** **46 passing** (`npm test`); syntax clean.
 - **Verified by headless screenshot:** canvas + labels + palette + i18n render; controls +
   TEST banner in setup; Live mode hides chrome; regions color end-to-end (parser → engine →

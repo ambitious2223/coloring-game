@@ -83,6 +83,7 @@ async function boot() {
   setText('tGameMode', 'gameMode');
   setText('tCanvas', 'canvas');
   setText('tIconStyle', 'iconStyle');
+  setText('tAutoCam', 'autoCam');
   setText('tSignupMode', 'signupMode');
   setText('tSkipSeconds', 'skipSeconds');
   setText('tPerTurn', 'regionsPerTurn');
@@ -138,12 +139,25 @@ async function boot() {
     return;
   }
 
+  let canvasIndex = [];
+  let pixelGifts = [];
+
   // Canvas index (Canvas picker + mode/canvas pairing).
   try {
     const idxRes = await fetch('/js/data/canvases/index.json');
     if (idxRes.ok) {
       const idx = await idxRes.json();
       canvasIndex = Array.isArray(idx.canvases) ? idx.canvases : [];
+    }
+  } catch {
+    /* ignore */
+  }
+  // Suggested 1-coin gift wiring for pixel mode (names shown in the palette).
+  try {
+    const gRes = await fetch('/js/data/pixel-gifts.json');
+    if (gRes.ok) {
+      const g = await gRes.json();
+      pixelGifts = Array.isArray(g.gifts) ? g.gifts : [];
     }
   } catch {
     /* ignore */
@@ -160,7 +174,7 @@ async function boot() {
 
   // Pixel (paid) canvases get a fill engine instead of the region-colour engine.
   let iconStyle = 'bw';
-  let canvasIndex = [];
+  let autoCam = true;
 
   // --- state ---
   let selectedColor = 1;
@@ -187,6 +201,11 @@ async function boot() {
   } catch {
     /* ignore */
   }
+  try {
+    if (localStorage.getItem('cc.autoCam') === '0') autoCam = false;
+  } catch {
+    /* ignore */
+  }
   buildLegend();
 
   const queue = createQueue();
@@ -203,6 +222,7 @@ async function boot() {
     extraDefs: premiumDefs(),
     onRegionClick: (n) => handleRegionClick(n),
   });
+  if (pixelEngine) positionRail();
 
   const paletteBar = createPaletteBar({
     root: document.getElementById('paletteBar'),
@@ -380,7 +400,7 @@ async function boot() {
     const cells = pixelEngine.fillRandom(color, count);
     if (!cells.length) return 0;
     renderCells(cells);
-    board.focusCell(cells[0].number, 2.0); // auto-zoom to the action
+    if (autoCam) board.focusCell(cells[0].number, 2.0); // auto-camera
     ticker.add({
       user: user || 'gift',
       region: cells.map((c) => c.number).join(','),
@@ -403,6 +423,10 @@ async function boot() {
   }
 
   // ---- pixel legend (colours -> gift triggers) ----
+  function giftNameFor(color) {
+    const g = pixelGifts.find((x) => x.color === color);
+    return g ? g.giftName : '';
+  }
   function buildLegend() {
     const el = document.getElementById('legend');
     if (!el) return;
@@ -412,16 +436,36 @@ async function boot() {
     }
     const rows = [`<div class="cc-leg-title">${i18n.t('legendTitle')}</div>`];
     for (const c of palette) {
+      const name = giftNameFor(c.index);
       rows.push(
         `<div class="cc-leg-row" data-color="${c.index}"><span class="cc-leg-num">${c.index}</span>` +
           `<span class="cc-leg-sw" style="background:${c.hex}"></span>` +
-          `<span class="cc-icon" title="${i18n.t('legendTitle')}">🎁</span>` +
-          `<span class="cc-leg-left" data-color="${c.index}">–</span></div>`
+          `<span class="cc-icon" title="${name || 'gift'}">🎁</span>` +
+          `<span class="cc-leg-info"><span class="cc-leg-name">${name}</span>` +
+          `<span class="cc-leg-left" data-color="${c.index}">–</span></span></div>`
       );
     }
     el.innerHTML = rows.join('');
     el.className = 'cc-legend ico-' + iconStyle;
     updateLegend();
+    positionRail();
+  }
+  // Put the palette right beside the canvas, matched to the board's box height.
+  function positionRail() {
+    const el = document.getElementById('legend');
+    if (!el || !pixelEngine) return;
+    const board = document.querySelector('.cc-board');
+    if (!board) return;
+    const r = board.getBoundingClientRect();
+    const railW = 244;
+    let left = r.right + 14;
+    if (left + railW > window.innerWidth - 8) left = Math.max(8, r.left - railW - 14);
+    el.style.position = 'fixed';
+    el.style.left = left + 'px';
+    el.style.top = r.top + 'px';
+    el.style.height = r.height + 'px';
+    el.style.right = 'auto';
+    el.style.bottom = 'auto';
   }
   // Per-colour remaining pixels (and a tick when a colour is finished).
   function updateLegend() {
@@ -814,6 +858,15 @@ async function boot() {
       }
       applyLegend();
     },
+    onAutoCam: (v) => {
+      autoCam = !!v;
+      try {
+        localStorage.setItem('cc.autoCam', autoCam ? '1' : '0');
+      } catch {
+        /* ignore */
+      }
+      if (!autoCam) board.resetZoom();
+    },
     onSignupMode: (m) => {
       signupMode = m === 'gift' ? 'gift' : 'free';
     },
@@ -960,6 +1013,7 @@ async function boot() {
   document.addEventListener('mousemove', () => {
     if (live) showLiveHint(2500);
   });
+  window.addEventListener('resize', () => positionRail());
 
   // ---------- demo driver (turn mode, offline) ----------
   const demoOrder = meta.regions.map((r) => r.number);
@@ -1023,6 +1077,7 @@ async function boot() {
   controlPanel.setCanvas(config.canvas);
   controlPanel.setCanvasOptions(canvasIndex.length ? canvasIndex : [{ dir: config.canvas, title: config.canvas }], config.canvas);
   controlPanel.setIconStyle(iconStyle);
+  controlPanel.setAutoCam(autoCam);
   if (gameMode === 'turns') {
     turnEngine.openSignup();
     renderSignup();

@@ -13,6 +13,7 @@ export function wireControlPanel({
   onSignupMode,
   onCanvas,
   onIconStyle,
+  onAutoCam,
   onOpenSignup,
   onStart,
   onSkip,
@@ -29,6 +30,7 @@ export function wireControlPanel({
   const signupModeSel = document.getElementById('ctlSignupMode');
   const canvasSel = document.getElementById('ctlCanvas');
   const iconStyleSel = document.getElementById('ctlIconStyle');
+  const autoCamEl = document.getElementById('ctlAutoCam');
   const autoSimEl = document.getElementById('ctlAutoSim');
   const regionEl = document.getElementById('ctlRegion');
   const colorEl = document.getElementById('ctlColor');
@@ -55,6 +57,7 @@ export function wireControlPanel({
   signupModeSel.addEventListener('change', () => onSignupMode(signupModeSel.value));
   canvasSel.addEventListener('change', () => onCanvas(canvasSel.value));
   iconStyleSel.addEventListener('change', () => onIconStyle(iconStyleSel.value));
+  autoCamEl.addEventListener('change', () => onAutoCam(autoCamEl.checked));
   autoSimEl.addEventListener('change', () => onAutoSim(autoSimEl.checked));
   perTurnEl.addEventListener('change', () => onPerTurn(Number(perTurnEl.value)));
   skipSecondsEl.addEventListener('change', () => onSkipSeconds(Number(skipSecondsEl.value)));
@@ -92,6 +95,9 @@ export function wireControlPanel({
     },
     setIconStyle: (s) => {
       iconStyleSel.value = s;
+    },
+    setAutoCam: (v) => {
+      autoCamEl.checked = !!v;
     },
     setAutoSim: (v) => {
       autoSimEl.checked = !!v;
