@@ -287,6 +287,65 @@ body.test .cc-testbanner { display: block; }
 }
 .cc-madeby { font-size: 14px; color: var(--muted); margin-top: 12px; line-height: 1.5; }
 
+/* ---------- phase instruction bar + toasts (visible on stream) ---------- */
+.cc-instr {
+  position: fixed;
+  left: 50%;
+  top: 74px;
+  transform: translateX(-50%);
+  z-index: 38;
+  background: rgba(15, 16, 21, 0.88);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 9px 20px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  max-width: 92vw;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+.cc-instr:empty { display: none; }
+body.live .cc-instr { top: 14px; }
+
+.cc-toasts {
+  position: fixed;
+  left: 50%;
+  top: 122px;
+  transform: translateX(-50%);
+  z-index: 46;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  pointer-events: none;
+}
+body.live .cc-toasts { top: 62px; }
+.cc-toast {
+  background: rgba(15, 16, 21, 0.94);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+  max-width: 80vw;
+  animation: cc-toast-in 260ms ease;
+  transition: opacity 300ms ease;
+}
+.cc-toast.warn { border-left-color: var(--warn); }
+.cc-toast.good { border-left-color: var(--ok); }
+@keyframes cc-toast-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: none; }
+}
+
 /* ---------- live mode: hide all chrome ---------- */
 body.live .cc-header,
 body.live .cc-panel,

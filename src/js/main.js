@@ -140,6 +140,7 @@ async function boot() {
   let turnDeadline = 0;
   let artworkTitle = '';
   const signatures = [];
+  let lastTurnUserId = '';
 
   const queue = createQueue();
   let sections = buildSections(meta.regions, perTurn);
@@ -261,6 +262,38 @@ async function boot() {
     return card;
   }
 
+  // ---- phase instruction bar + toasts (visible on stream) ----
+  const toastsEl = document.getElementById('toasts');
+  const instrEl = document.getElementById('instrBar');
+
+  function setInstruction(text) {
+    if (instrEl) instrEl.textContent = text || '';
+  }
+  function toast(text, { ms = 3200, tone = '' } = {}) {
+    if (!toastsEl || !text) return;
+    const el = document.createElement('div');
+    el.className = 'cc-toast' + (tone ? ' ' + tone : '');
+    el.textContent = text;
+    toastsEl.appendChild(el);
+    while (toastsEl.children.length > 4) toastsEl.removeChild(toastsEl.firstChild);
+    setTimeout(() => {
+      el.style.opacity = '0';
+      setTimeout(() => el.remove(), 320);
+    }, ms);
+  }
+  // The always-on hint telling viewers exactly what to type right now.
+  function refreshInstruction() {
+    if (gameMode === 'free') return setInstruction(i18n.t('instrFree'));
+    if (turnEngine.state === 'signup') return setInstruction(i18n.t('instrSignup', { word: i18n.t('joinWord') }));
+    if (turnEngine.state === 'waiting') return setInstruction(i18n.t('instrWaiting', { word: i18n.t('joinWord') }));
+    if (turnEngine.state === 'await-color') {
+      const p = turnEngine.current;
+      return setInstruction(p ? i18n.t('instrTurn', { name: p.name }) : i18n.t('instrFree'));
+    }
+    if (turnEngine.state === 'complete') return setInstruction(i18n.t('instrComplete'));
+    setInstruction('');
+  }
+
   // ---------- turn-relay rendering ----------
   function renderSignup() {
     if (gameMode !== 'turns') return;
@@ -352,10 +385,17 @@ async function boot() {
     if (gameMode !== 'turns') return;
     if (turnEngine.state !== 'await-color') {
       renderSpotlight();
+      refreshInstruction();
       return;
     }
     turnDeadline = Date.now() + skipSeconds * 1000;
     renderSpotlight();
+    refreshInstruction();
+    const cur = turnEngine.current;
+    if (cur && cur.userId !== lastTurnUserId) {
+      toast(i18n.t('toastTurnStart', { name: cur.name }), { tone: 'good' });
+      lastTurnUserId = cur.userId;
+    }
     turnTimer = setInterval(() => {
       const left = Math.max(0, Math.ceil((turnDeadline - Date.now()) / 1000));
       const el = overlayEl.querySelector('.cc-timer');
@@ -363,6 +403,7 @@ async function boot() {
       if (left <= 0) {
         clearTurnTimer();
         turnEngine.skip();
+        toast(i18n.t('toastSkipped'));
         beginTurn();
       }
     }, 250);
@@ -384,7 +425,15 @@ async function boot() {
     });
     updateProgress();
     paletteBar.highlight(color);
+    toast(i18n.t('toastColored', { name: entry.author.name, region: entry.regions.join('-') }));
     clearTurnTimer();
+    if (turnEngine.state === 'complete') {
+      const names = [...new Set(turnEngine.results().map((r) => (r.author ? r.author.name : '')))]
+        .filter(Boolean)
+        .join(', ');
+      toast(i18n.t('toastComplete', { names }), { ms: 8000, tone: 'good' });
+      lastTurnUserId = '';
+    }
     beginTurn();
     reportState();
   }
@@ -428,6 +477,7 @@ async function boot() {
       const user = userOf(ev);
       if (isJoin(text)) {
         if (signupMode === 'free' && turnEngine.addPlayer(user)) {
+          toast(i18n.t('toastJoined', { name: user.name }));
           if (turnEngine.state === 'signup') renderSignup();
           reportState();
         }
@@ -457,6 +507,7 @@ async function boot() {
     const user = event ? userOf(event) : { userId: 'command', name: 'command', avatar: '' };
     if (cmd === 'join') {
       if (turnEngine.addPlayer(user)) {
+        toast(i18n.t('toastJoined', { name: user.name }));
         if (turnEngine.state === 'signup') renderSignup();
       }
     } else if (cmd === 'gold') {
@@ -490,8 +541,9 @@ async function boot() {
     if (key === 'command') {
       const cmd = commandFromPayload(payload);
       if (cmd) runCommand(cmd.name, cmd.args, ef.event);
-    } else if (key === 'priority_join') {
+    } else     if (key === 'priority_join') {
       if (gifter && gifter.userId && turnEngine.addPlayer(gifter, { priority: true })) {
+        toast(i18n.t('toastJoined', { name: gifter.name }), { tone: 'good' });
         if (turnEngine.state === 'signup') renderSignup();
       }
     } else if (key === 'name_artwork') {
@@ -551,6 +603,7 @@ async function boot() {
       clearTurnTimer();
       hideOverlay();
     }
+    refreshInstruction();
     reportState();
   }
 
@@ -574,12 +627,14 @@ async function boot() {
     onStart: () => {
       if (gameMode !== 'turns') setGameMode('turns');
       turnEngine.start();
+      toast(i18n.t('toastStart'), { tone: 'good' });
       beginTurn();
       reportState();
     },
     onSkip: () => {
       if (gameMode !== 'turns') return;
       turnEngine.skip();
+      toast(i18n.t('toastSkipped'));
       beginTurn();
       reportState();
     },
@@ -781,6 +836,7 @@ async function boot() {
   }
   setLive(startLive);
 
+  refreshInstruction();
   updateProgress();
   updateStatus();
   reportState();

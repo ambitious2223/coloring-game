@@ -153,6 +153,10 @@ validator + game together).
   routes a direct effect or the generic `command` effect (`{ name, args }`); `runCommand()`
   handles `join` / `gold` / `wipe` / `color`. Command words are declared in
   `tikora.manifest.json` (`commands`).
+  - **On-screen guidance:** an always-on **instruction bar** (`#instrBar`) tells viewers the
+    exact thing to type for the current phase (free / join / waiting / turn / complete), and
+    **toasts** (`#toasts`, capped at 4) announce joins, turn starts, skips, colors and the
+    finish. Both stay visible in Live mode and are i18n'd.
 - **Tests:** **37 passing** (`npm test`); syntax clean.
 - **Verified by headless screenshot:** canvas + labels + palette + i18n render; controls +
   TEST banner in setup; Live mode hides chrome; regions color end-to-end (parser → engine →

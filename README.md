@@ -50,6 +50,11 @@ A calmer, co-creative mode (Controls → **Game mode: Turns**):
    section.
 4. **Complete** — when the canvas is full, a "made by" roll credits everyone.
 
+On screen, an **instruction bar** always tells viewers exactly what to type for the current
+phase (*"To join the mural, comment 'join'"*, *"Ayla1, comment a color number 1–10"*), and
+**toasts** announce joins, turns, skips and the finish — so you don't have to explain it
+live.
+
 Host controls: Sign-up **Free / Gift**, Open sign-up, Start, Skip, End, **skip seconds**,
 **regions per turn** (1–6). Paid extras (via gifts): **priority sign-up**, **premium
 colours** (gold / neon / rainbow / stripes / dots), **name the artwork**, **sign the
