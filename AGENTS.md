@@ -100,9 +100,11 @@ The hub is external. This game's responsibilities:
 
 - **Connection.** `src/js/integrations/connector.js` loads the hub's browser client
   (`http://127.0.0.1:27016/hub-client.js`) and calls `connectHub(...)`. Sources are
-  swappable: **Hub** (live) / **Demo** (offline simulator) / **Off** (silent). Auto picks
-  Hub if reachable, else Demo. Effect delivery needs the game's key; broadcast events
-  (chat/gifts) arrive without it.
+  swappable: **Hub** (live) / **Bridge** (direct TikFinity WebSocket, default
+  `ws://127.0.0.1:21213/`, a backup for detecting interactions) / **Hub + Bridge** (both,
+  chat de-duplicated) / **Demo** (offline simulator) / **Off** (silent). Auto picks Hub if
+  reachable, else Demo. Effect delivery needs the game's key; broadcast events (chat/gifts)
+  arrive without it.
 - **Declare capabilities.** `tikora.manifest.json` is the authoritative list of the game's
   **effects** and **commands**; the hub reads it so they appear in the hub UI even when the
   game is offline. Mirror the effect keys in `CAPABILITIES` (`src/js/main.js`).
@@ -151,12 +153,15 @@ validator + game together).
   routes a direct effect or the generic `command` effect (`{ name, args }`); `runCommand()`
   handles `join` / `gold` / `wipe` / `color`. Command words are declared in
   `tikora.manifest.json` (`commands`).
-- **Tests:** **34 passing** (`npm test`); syntax clean.
+- **Tests:** **37 passing** (`npm test`); syntax clean.
 - **Verified by headless screenshot:** canvas + labels + palette + i18n render; controls +
   TEST banner in setup; Live mode hides chrome; regions color end-to-end (parser → engine →
   board → ticker → progress); a hub-routed `gold` command rendered a premium gradient region.
 - **Not built yet:** snapshot/timelapse of the finished mural, sounds, the `target`-color
   reveal mode, per-region author badges.
+- **Bridge backup** (`connector.js` `normalizeBridgeMessage`): `Bridge (TikFinity)` /
+  `Hub + Bridge` sources read a local bridge directly for interactions when the hub isn't
+  supplying them. Verified live (status showed "Bridge connected").
 - **Hub integration:** game-side contract ready (`docs/HUB_INTEGRATION.md`,
   `docs/COMMANDS.md`); **no mappings are seeded** — the streamer creates gift/interaction/
   command → effect mappings in the hub UI.

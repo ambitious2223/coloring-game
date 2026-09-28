@@ -10,6 +10,8 @@ export const config = {
   lang: (params.get('lang') || injected.locale || 'en').slice(0, 2),
   canvas: params.get('canvas') || injected.canvas || 'canvas-mandala',
   hubUrl: params.get('hub') || injected.hubUrl || 'http://127.0.0.1:27016/',
+  // direct TikFinity-style bridge WebSocket (backup source)
+  bridgeUrl: params.get('bridge') || injected.bridgeUrl || 'ws://127.0.0.1:21213/',
   // source: 'auto' (hub else demo) | 'hub' | 'demo' | 'off'
   source: params.get('source') || injected.source || 'auto',
   // game mode: 'free' | 'turns'

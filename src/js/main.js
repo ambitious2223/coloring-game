@@ -86,8 +86,10 @@ async function boot() {
 
   const srcSel = document.getElementById('ctlSource');
   srcSel.options[0].textContent = i18n.t('sourceHub');
-  srcSel.options[1].textContent = i18n.t('sourceDemo');
-  srcSel.options[2].textContent = i18n.t('sourceOff');
+  srcSel.options[1].textContent = i18n.t('sourceBridge');
+  srcSel.options[2].textContent = i18n.t('sourceBoth');
+  srcSel.options[3].textContent = i18n.t('sourceDemo');
+  srcSel.options[4].textContent = i18n.t('sourceOff');
   const modeSel = document.getElementById('ctlMode');
   modeSel.options[0].textContent = i18n.t('lock');
   modeSel.options[1].textContent = i18n.t('chaos');
@@ -633,19 +635,26 @@ async function boot() {
   // ---------- status / live ----------
   function updateStatus() {
     const active = sourceManager ? sourceManager.active : 'off';
+    const bs = sourceManager ? sourceManager.bridge : 'disabled';
     let text = i18n.t('statusOff');
     let cls = '';
     if (active === 'hub') {
       const waiting = Date.now() - lastEventAt > 6000;
       text = i18n.t(waiting ? 'statusHubWaiting' : 'statusHubLive');
       cls = 'ok';
+    } else if (active === 'both') {
+      text = i18n.t('statusBoth');
+      cls = bs === 'connected' ? 'ok' : 'mock';
+    } else if (active === 'bridge') {
+      text = i18n.t(bs === 'connected' ? 'statusBridge' : 'statusBridgeConnecting');
+      cls = bs === 'connected' ? 'ok' : 'mock';
     } else if (active === 'demo') {
       text = i18n.t('statusDemo');
       cls = 'mock';
     }
     controlPanel.setStatus(text, cls);
-    document.body.classList.toggle('test', active !== 'hub');
-    if (srcSel.value !== active && (active === 'hub' || active === 'demo' || active === 'off')) srcSel.value = active;
+    document.body.classList.toggle('test', active === 'demo' || active === 'off');
+    if (srcSel.value !== active && ['hub', 'bridge', 'both', 'demo', 'off'].includes(active)) srcSel.value = active;
   }
 
   function setLive(next) {
@@ -731,7 +740,8 @@ async function boot() {
     nextSample,
     intervalMs: 1100,
   });
-  await sourceManager.setMode(config.source === 'hub' || config.source === 'demo' || config.source === 'off' ? config.source : 'auto');
+  const initialSource = ['hub', 'bridge', 'both', 'demo', 'off'].includes(config.source) ? config.source : 'auto';
+  await sourceManager.setMode(initialSource);
 
   let autoSim = true;
   try {

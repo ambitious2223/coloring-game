@@ -59,8 +59,10 @@ artwork**. Map gifts → these effects in the Tikora hub UI.
 
 The **Controls** panel (button in the header, or the `` ` `` key) is the streamer surface:
 
-- **Source** — `Hub (live)` receives real TikTok events; `Demo` runs a local simulator
-  (auto-simulate on); `Off` is silent. Opening the game picks Hub if reachable, else Demo.
+- **Source** — `Hub (live)` receives real TikTok events; `Bridge (TikFinity)` connects
+  directly to a local bridge WebSocket as a backup; `Hub + Bridge` uses both (chat is
+  de-duplicated); `Demo` runs a local simulator; `Off` is silent. Opening the game picks Hub
+  if reachable, else Demo.
 - **Mode** — Lock / Chaos. **Simulate viewer**, **Reset**, and a manual region+color send.
 - **A yellow "TEST MODE" banner** shows whenever you are not on the live hub.
 

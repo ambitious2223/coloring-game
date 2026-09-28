@@ -21,8 +21,20 @@ reach the game, and gifts fire in-game effects.
 2. If the hub is unreachable, falls back to the built-in **offline mock** (simulated chat)
    so the game stays playable.
 
-Config resolution (first wins): URL query `?game=&key=&lang=&canvas=` →
+Config resolution (first wins): URL query `?game=&key=&lang=&canvas=&source=&bridge=` →
 `window.TIKORA_GAME_CONFIG` → defaults. Tikora's launcher injects `?game=&key=`.
+
+## Input sources (Controls → Source)
+
+| Source | What it connects to |
+|---|---|
+| `Hub (live)` | the Tikora relay — chat + routed effects |
+| `Bridge (TikFinity)` | a **direct** local bridge WebSocket (default `ws://127.0.0.1:21213/`) — a backup for detecting interactions when the hub isn't supplying them. Reads chat/gifts/interactions via the `{event, data}` message shape. |
+| `Hub + Bridge` | both at once; chat is de-duplicated (same user+text within ~4s); effects still come from the hub |
+| `Demo` | local simulator |
+| `Off` | silent |
+
+Override the bridge URL with `?bridge=ws://host:port/`.
 
 > A key is only needed for routed `effect`s. Without a key the game still receives the
 > broadcast event stream (chat / gifts), so comments register even before the key is set.
