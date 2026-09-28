@@ -35,17 +35,35 @@ export function createBoard({ mount, svgText, meta, palette, onRegionClick, minL
     }
   });
 
-  // Number labels drawn by the game (not baked into the SVG).
+  // Number labels drawn by the game (not baked into the SVG). In colour-numbered
+  // (pixel) canvases the printed label is the target colour, not the region id,
+  // and cells with target 0 are a fixed, non-fillable background.
+  const colorNumbering = meta.numbering === 'color';
+  const labelMinArea = colorNumbering ? 150 : minLabelArea;
+
+  if (colorNumbering) {
+    for (const r of meta.regions || []) {
+      if (!r.target) {
+        const p = paths.get(r.number);
+        if (p) {
+          p.style.fill = meta.background || '#ececec';
+          p.classList.add('cc-bg');
+        }
+      }
+    }
+  }
+
   const labels = document.createElementNS(SVG_NS, 'g');
   labels.setAttribute('class', 'cc-labels');
   for (const r of meta.regions || []) {
-    if (!Array.isArray(r.label) || r.area < minLabelArea) continue;
+    if (!Array.isArray(r.label) || r.area < labelMinArea) continue;
+    if (colorNumbering && !r.target) continue;
     const text = document.createElementNS(SVG_NS, 'text');
     text.setAttribute('x', r.label[0]);
     text.setAttribute('y', r.label[1]);
     text.setAttribute('text-anchor', 'middle');
     text.setAttribute('dominant-baseline', 'central');
-    text.textContent = String(r.number);
+    text.textContent = String(colorNumbering ? r.target : r.number);
     labels.appendChild(text);
   }
   root.appendChild(labels);
@@ -53,7 +71,7 @@ export function createBoard({ mount, svgText, meta, palette, onRegionClick, minL
   if (onRegionClick) {
     root.addEventListener('click', (e) => {
       const path = e.target.closest && e.target.closest('path[data-region]');
-      if (path) onRegionClick(Number(path.dataset.region));
+      if (path && !path.classList.contains('cc-bg')) onRegionClick(Number(path.dataset.region));
     });
   }
 

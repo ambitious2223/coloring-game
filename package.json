@@ -8,6 +8,8 @@
     "serve": "node scripts/serve.mjs",
     "gen": "node scripts/generate-svg.mjs",
     "gen:photo": "node scripts/generate-svg.mjs --style photo",
+    "gen:pixel": "node scripts/pixel-to-canvas.mjs",
+    "canvases:index": "node scripts/build-canvas-index.mjs",
     "gen:demo": "node scripts/gen-demo-canvas.mjs",
     "gen:examples": "node scripts/gen-examples.mjs && node scripts/validate-canvas.mjs --all",
     "validate": "node scripts/validate-canvas.mjs src/js/data/canvases/canvas-demo",

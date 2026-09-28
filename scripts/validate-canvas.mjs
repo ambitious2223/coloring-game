@@ -124,6 +124,10 @@ function validateCanvas(dir) {
   const palette = Array.isArray(json.palette) ? json.palette : null;
   if (!palette || palette.length === 0) errors.push('canvas.json: "palette" must be a non-empty array');
   if (!Array.isArray(json.viewBox) || json.viewBox.length !== 4) errors.push('canvas.json: "viewBox" must be [x,y,w,h]');
+  if (json.type != null && !['standard', 'pixel'].includes(json.type)) errors.push(`canvas.json: unknown type "${json.type}"`);
+  if (json.numbering != null && !['unique', 'color'].includes(json.numbering)) {
+    errors.push(`canvas.json: unknown numbering "${json.numbering}"`);
+  }
 
   if (Array.isArray(json.viewBox) && json.viewBox.length === 4) {
     const vb = json.viewBox.join(' ');
@@ -162,8 +166,9 @@ function validateCanvas(dir) {
         errors.push(`region ${r.number}: area (${r.area}) does not match geometry (${shoelace(points).toFixed(1)})`);
       }
       if (r.target != null) {
-        if (!palette || !Number.isInteger(r.target) || r.target < 1 || r.target > palette.length) {
-          errors.push(`region ${r.number}: target ${r.target} out of palette range 1..${palette ? palette.length : '?'}`);
+        const max = palette ? palette.length : 9;
+        if (!Number.isInteger(r.target) || r.target < 0 || r.target > max) {
+          errors.push(`region ${r.number}: target ${r.target} out of range 0..${max} (0 = background)`);
         }
       }
     }

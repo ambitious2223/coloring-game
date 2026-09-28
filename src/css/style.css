@@ -120,6 +120,7 @@ body.test .cc-testbanner { display: block; }
 .cc-svg path.cc-filled { cursor: default; }
 .cc-svg path.cc-flash { filter: brightness(1.25); }
 .cc-svg path.cc-selected { stroke: var(--accent); stroke-width: 4; }
+.cc-svg path.cc-bg { cursor: default; }
 
 .cc-labels { pointer-events: none; }
 .cc-labels text {

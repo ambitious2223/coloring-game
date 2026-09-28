@@ -1,0 +1,85 @@
+{
+  "generated": "2026-09-28T12:16:00.599Z",
+  "canvases": [
+    {
+      "id": "blobs-3-80",
+      "dir": "canvas-blobs-3",
+      "type": "standard",
+      "title": "Blobs Canvas",
+      "numbering": "unique",
+      "regionCount": 80
+    },
+    {
+      "id": "canvas-demo",
+      "dir": "canvas-demo",
+      "type": "standard",
+      "title": "Demo Canvas (8x10)",
+      "numbering": "unique",
+      "regionCount": 80
+    },
+    {
+      "id": "mandala-5-96",
+      "dir": "canvas-mandala",
+      "type": "standard",
+      "title": "Mandala Canvas",
+      "numbering": "unique",
+      "regionCount": 96
+    },
+    {
+      "id": "mandala-9-70",
+      "dir": "canvas-mandala-9",
+      "type": "standard",
+      "title": "Mandala Canvas",
+      "numbering": "unique",
+      "regionCount": 70
+    },
+    {
+      "id": "mosaic-7-60",
+      "dir": "canvas-mosaic-7",
+      "type": "standard",
+      "title": "Mosaic Canvas",
+      "numbering": "unique",
+      "regionCount": 60
+    },
+    {
+      "id": "photo-demo-abstract",
+      "dir": "photo-demo-abstract",
+      "type": "standard",
+      "title": "demo-abstract",
+      "numbering": "unique",
+      "regionCount": 10
+    },
+    {
+      "id": "photo-demo-portrait",
+      "dir": "photo-demo-portrait",
+      "type": "standard",
+      "title": "demo-portrait",
+      "numbering": "unique",
+      "regionCount": 9
+    },
+    {
+      "id": "photo-demo-sunset",
+      "dir": "photo-demo-sunset",
+      "type": "standard",
+      "title": "demo-sunset",
+      "numbering": "unique",
+      "regionCount": 15
+    },
+    {
+      "id": "pixel-heart",
+      "dir": "pixel-heart",
+      "type": "pixel",
+      "title": "Pixel Heart",
+      "numbering": "color",
+      "regionCount": 256
+    },
+    {
+      "id": "voronoi-42-90",
+      "dir": "canvas-voronoi-42",
+      "type": "standard",
+      "title": "Voronoi Canvas",
+      "numbering": "unique",
+      "regionCount": 90
+    }
+  ]
+}
