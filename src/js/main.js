@@ -341,19 +341,25 @@ async function boot() {
     if (live) showLiveHint(2500);
   });
 
-  // --- build the simulator samples ---
-  const samples = [];
-  for (let i = 0; i < 24; i++) {
-    samples.push(`${1 + Math.floor(Math.random() * engine.total())} ${1 + Math.floor(Math.random() * palette.length)}`);
-  }
+  // --- demo simulator: fill regions in order, cycling the palette, so the
+  //     canvas builds up as a deliberate rainbow rather than random splotches ---
+  const demoOrder = meta.regions.map((r) => r.number);
+  let demoSampleIdx = 0;
+  const nextSample = () => {
+    if (!demoOrder.length) return null;
+    const region = demoOrder[demoSampleIdx % demoOrder.length];
+    const color = 1 + (demoSampleIdx % palette.length);
+    demoSampleIdx += 1;
+    return `${region} ${color}`;
+  };
 
   // --- start source ---
   sourceManager = createSourceManager({
     config,
     capabilities: CAPABILITIES,
     handlers: { onChat: handleChat, onEffect: handleEffect, onStatus: () => {} },
-    samples,
-    intervalMs: 2200,
+    nextSample,
+    intervalMs: 1100,
   });
   await sourceManager.setMode(config.source === 'hub' || config.source === 'demo' || config.source === 'off' ? config.source : 'auto');
 

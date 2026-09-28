@@ -45,7 +45,7 @@ function loadScriptOnce(src, timeoutMs = 2500) {
 
 const DEMO_NAMES = ['ayla', 'mert', 'sara', 'juan', 'lin', 'omar', 'zoe', 'kenji', 'mia', 'raj'];
 
-export function createSourceManager({ config, capabilities, handlers, samples, intervalMs = 3000 }) {
+export function createSourceManager({ config, capabilities, handlers, samples, nextSample, intervalMs = 3000 }) {
   const onChat = handlers.onChat || (() => {});
   const onEffect = handlers.onEffect || (() => {});
   const onStatus = handlers.onStatus || (() => {});
@@ -57,6 +57,10 @@ export function createSourceManager({ config, capabilities, handlers, samples, i
   let autoSim = false;
 
   const randomSample = () => {
+    if (typeof nextSample === 'function') {
+      const s = nextSample();
+      if (s) return s;
+    }
     const list = samples && samples.length ? samples : ['1 red'];
     return list[Math.floor(Math.random() * list.length)];
   };

@@ -60,7 +60,7 @@ is offline) and mirrored in `CAPABILITIES` in `src/js/main.js`.
 `hub.reportState(...)` on changes:
 
 ```js
-{ ready: true, phase: "playing", canvas: "photo-demo-sunset", mode: "lock" | "chaos",
+{ ready: true, phase: "playing", canvas: "canvas-mandala", mode: "lock" | "chaos",
   colored: 34, total: 120 }
 ```
 

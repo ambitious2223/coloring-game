@@ -115,8 +115,13 @@ Therefore:
   - `scripts/serve.mjs` static server on **:45125** (verified: /, css, js, canvas all 200).
   - `scripts/gen-demo-canvas.mjs` placeholder generator (jittered lattice).
   - `scripts/generate-svg.mjs` — the real procedural generator (Voronoi + mosaic/blobs/
-    mandala, deterministic from `--seed`, polylabel labels). Canvases: `canvas-voronoi-42`,
-    `canvas-mosaic-7`, `canvas-blobs-3`, `canvas-mandala-9`, `canvas-demo` — all **PASS**.
+    mandala, deterministic from `--seed`, polylabel labels). Canvases: `canvas-mandala`
+    (**the default**, 96 regions), `canvas-voronoi-42`, `canvas-mosaic-7`, `canvas-blobs-3`,
+    `canvas-mandala-9`, `canvas-demo` — all **PASS**.
+  - **Demo fill looks intentional:** the simulator fills regions in canvas order while
+    cycling the palette, so a mandala builds center-out as a rainbow instead of random
+    splotches. A photo/voronoi canvas still looks messy under random viewers — that is the
+    nature of free coloring; mandalas are the flattering default.
   - `scripts/photo-to-canvas.mjs` — photo → canvas (quantize to palette, 8-conn labeling,
     label-mode filter, region merging, Moore tracing, RDP, spatial numbering, auto-level).
     Uses the `sharp` devDependency. Verified on a flat-shape image, a cartoon card, and pure
