@@ -369,6 +369,9 @@ body.pixel .cc-panel { display: none; }
 .cc-legend .cc-leg-num { width: 18px; text-align: center; font-weight: 800; color: var(--accent); }
 .cc-legend .cc-leg-sw { width: 18px; height: 18px; border-radius: 5px; border: 1px solid rgba(0, 0, 0, 0.3); }
 .cc-legend .cc-leg-name { color: var(--muted); min-width: 52px; }
+.cc-legend .cc-leg-left { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--text); white-space: nowrap; }
+.cc-legend .cc-leg-row.done { opacity: 0.45; }
+.cc-legend .cc-leg-row.done .cc-leg-left { color: var(--ok); }
 .cc-icon { font-size: 20px; line-height: 1; display: inline-block; filter: grayscale(1) contrast(1.2); }
 .cc-legend.ico-bw .cc-icon { filter: grayscale(1) contrast(1.5); }
 .cc-legend.ico-glitch .cc-icon { animation: cc-glitch 1.4s steps(2, end) infinite; }

@@ -235,6 +235,7 @@ async function boot() {
       const p = pixelEngine.progress();
       document.getElementById('progressText').textContent = `${p.filled} / ${p.total}`;
       document.getElementById('progressBar').style.width = `${p.total ? p.percent * 100 : 0}%`;
+      updateLegend();
       return;
     }
     const p = engine.progress();
@@ -412,13 +413,28 @@ async function boot() {
     const rows = [`<div class="cc-leg-title">${i18n.t('legendTitle')}</div>`];
     for (const c of palette) {
       rows.push(
-        `<div class="cc-leg-row"><span class="cc-leg-num">${c.index}</span>` +
+        `<div class="cc-leg-row" data-color="${c.index}"><span class="cc-leg-num">${c.index}</span>` +
           `<span class="cc-leg-sw" style="background:${c.hex}"></span>` +
-          `<span class="cc-icon" title="gift">🎁</span></div>`
+          `<span class="cc-icon" title="${i18n.t('legendTitle')}">🎁</span>` +
+          `<span class="cc-leg-left" data-color="${c.index}">–</span></div>`
       );
     }
     el.innerHTML = rows.join('');
     el.className = 'cc-legend ico-' + iconStyle;
+    updateLegend();
+  }
+  // Per-colour remaining pixels (and a tick when a colour is finished).
+  function updateLegend() {
+    if (!pixelEngine) return;
+    const el = document.getElementById('legend');
+    if (!el) return;
+    for (const c of palette) {
+      const span = el.querySelector(`.cc-leg-left[data-color="${c.index}"]`);
+      if (!span) continue;
+      const n = pixelEngine.remaining(c.index);
+      span.textContent = n ? `${n} ${i18n.t('leftLabel')}` : '✓';
+      if (span.parentElement) span.parentElement.classList.toggle('done', n === 0);
+    }
   }
   function applyLegend() {
     const el = document.getElementById('legend');
