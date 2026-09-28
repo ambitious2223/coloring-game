@@ -116,6 +116,7 @@ The **Controls** panel (button in the header, or the `` ` `` key) is the streame
   if reachable, else Demo.
 - **Mode** — Lock / Chaos. **Simulate viewer**, **Reset**, and a manual region+color send.
 - **A yellow "TEST MODE" banner** shows whenever you are not on the live hub.
+- **Language:** EN / TR / AR switcher in the header (persisted; Arabic is full RTL).
 
 **Testing without a stream:** click a palette color, then click a region — it colors
 instantly (host action, ignores lock/cooldown). That's the fastest way to see it working.

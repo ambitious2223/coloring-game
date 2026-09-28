@@ -133,10 +133,14 @@ validator + game together).
 
 - **Version:** 0.1.0-alpha (local dev, not released)
 - **Server:** `scripts/serve.mjs` static server on **:45125** (verified 200s).
-- **Generators:** `generate-svg.mjs` (procedural, deterministic), `photo-to-canvas.mjs`
-  (quantize → merge → trace → simplify; `sharp` dev-dep), `gen-examples.mjs`
-  (`npm run gen:examples`, fully offline). Canvases include `canvas-mandala` (**default**,
-  96 regions) + Voronoi/mosaic/blobs + photo demos — all valid.
+- **Language switch:** header **EN / TR / AR** dropdown (persisted; `?lang=` overrides); an
+  i18n parity test guarantees no string is missing from any language. Arabic verified in all
+  three modes (Free / Turns / Pixel, RTL).
+- **Generators:** `generate-svg.mjs` (procedural voronoi/mosaic/blobs/mandala),
+  `photo-to-canvas.mjs` (photo → canvas; `sharp` dev-dep), `pixel-to-canvas.mjs`
+  (`npm run gen:pixel`), `gen-examples.mjs` (`npm run gen:examples`, offline). Canvases:
+  **20 pixel arts** + `canvas-mandala` (**default**, 96 regions) + Voronoi/mosaic/blobs +
+  photo demos; the canvas index (`src/js/data/canvases/index.json`) drives the picker. All valid.
 - **Game UI:** SVG board with number labels, palette, progress + ticker, lock (default) and
   chaos modes, EN/TR/AR i18n.
 - **Controls panel** (`src/js/ui/control-panel.js`): left drawer (header button or `` ` ``) —
@@ -164,7 +168,7 @@ validator + game together).
     `reveal_all` / `golden_pixel`; **milestones** at 25/50/75/100%; a **legend overlay** with
     animatable trigger icons (bw/glitch/fade); **zoom/pan + auto-focus** on the board.
     `npm run gen:pixel` builds pixel canvases (procedural heart, or from an image); the
-    canvas index (`canvas-index.json`) drives the Canvas picker + playlist. Switching mode
+    canvas index (`index.json`) drives the Canvas picker + playlist. Switching mode
     reloads only when the canvas type must change. The palette sits **beside the canvas**
     (right side, matched to its box height) and shows, per color, a **crayon-style chip +
     number badge**, the **gift image + name** (from `src/js/data/pixel-gifts.json`), and
@@ -172,17 +176,22 @@ validator + game together).
     (style bar on the palette: Off / Color / B&W / Fade, always visible); watermarks hide as
     cells fill. An **Auto camera** toggle (Controls) controls auto-zoom (max 10×). The
     **Canvas dropdown is filtered by mode** (Pixel → pixel canvases only; Free/Turns →
-    standard). Pixel shapes: heart/star/smiley/diamond (`gen:pixel --shape`). Host
-    **left-click fills** a pixel with its correct colour, **right-click clears** it
-    (`pixelEngine.fillCell/unfill`, `board.clear`). Suggested 1-coin gift wiring is in
-    `docs/PIXEL_GIFTS.md` (GG · Ice Cream Cone · Rose · Blow a kiss · Thumbs Up · Go Popular ·
-    TikTok · Love you · Heart).
-- **Tests:** **46 passing** (`npm test`); syntax clean.
+    standard). Pixel shapes (20): `heart, star, smiley, diamond, triangle, pentagon, hexagon,
+    octagon, circle, square, plus, cross, ring, frame, moon, sun, flower, arrow, bolt,
+    chevron` (`gen:pixel --shape`). Host **left-click fills** a pixel with its correct colour,
+    **right-click clears** it (`pixelEngine.fillCell/unfill`, `board.clear`). Suggested 1-coin
+    gift wiring is in `docs/PIXEL_GIFTS.md` (GG · Ice Cream Cone · Rose · Blow a kiss ·
+    Thumbs Up · Go Popular · TikTok · Love you · Heart).
+- **Tests:** **48 passing** (`npm test`); syntax clean.
 - **Verified by headless screenshot:** canvas + labels + palette + i18n render; controls +
   TEST banner in setup; Live mode hides chrome; regions color end-to-end (parser → engine →
-  board → ticker → progress); a hub-routed `gold` command rendered a premium gradient region.
-- **Not built yet:** snapshot/timelapse of the finished mural, sounds, the `target`-color
-  reveal mode, per-region author badges.
+  board → ticker → progress); a hub-routed `gold` command rendered a premium gradient region;
+  **Pixel mode** (crayon palette with gift images + pixels-left, per-pixel gift watermarks in
+  Color/B&W, mode-filtered canvas list, host left-fill / right-clear) verified across shapes.
+- **Parked (not built):** snapshot/timelapse of the finished mural, sound cues, `target`-color
+  reveal, per-region author badges, per-user cap, free-pixel allowance, leaderboard/gifter
+  spotlight, and bundling the 9 gift images locally (currently loaded from the TikTok CDN with
+  emoji fallback).
 - **Bridge backup** (`connector.js` `normalizeBridgeMessage`): `Bridge (TikFinity)` /
   `Hub + Bridge` sources read a local bridge directly for interactions when the hub isn't
   supplying them. Verified live (status showed "Bridge connected").
@@ -197,7 +206,7 @@ npm run serve        # http://localhost:45125
 npm run gen -- --style voronoi --seed 42 --regions 90 --out src/js/data/canvases/my-canvas
 npm run gen:photo -- --image "C:\photos\cat.jpg" --regions 60   # or --dir <folder>
 npm run gen:examples # regenerate the offline example photo canvases (no network)
-npm run gen:pixel -- --shape heart   # or --image <file> --grid-size 16
+npm run gen:pixel -- --shape heart   # 20 shapes, or --image <file> --grid-size 16
 npm run canvases:index # rebuild the canvas index after adding canvases
 npm test             # core logic tests (node --test)
 npm run validate     # validate the demo canvas
